@@ -23,7 +23,7 @@ from: markdown+emoji
 
 Like all other submissions for this course, we expect the memo to be neat and well organized.
 
-You should make this document your own. This is a template. To help with this we have added a date to the yaml above (good whenever writing memos). You should remove this block when making this document your own.
+You should make this document your own. This is a template. To help with this we have added a date to the yaml above (good whenever writing memos). You should remove this block when making this document your own. Testing to see if the .gitignore worked as well as the rebase
 
 :::
 
