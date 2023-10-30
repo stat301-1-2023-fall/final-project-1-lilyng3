@@ -18,39 +18,94 @@ execute:
 from: markdown+emoji 
 ---
 
-::: {.callout-important}
-## Memo format
-
-Like all other submissions for this course, we expect the memo to be neat and well organized.
-
-You should make this document your own. This is a template. To help with this we have added a date to the yaml above (good whenever writing memos). You should remove this block when making this document your own. Testing to see if the .gitignore worked as well as the rebase
-
-:::
-
-::: {.callout-tip icon=false}
-
+::: {.callout-tip icon="false"}
 ## Github Repo Link
 
 [Progress Memo 1 Github Repo](https://github.com/stat301-1-2023-fall/final-project-1-lilyng3)
-
 :::
 
 ## Data source
 
-Blah blah blah^[where blah blah came from, an example of footnote]
+My data source is the City of Chicago's Public Schools (CPS). The data was found on the official United States Government website, [data.gov](https://data.gov/). It can also be found on the [City of Chicago's Data Portal](https://data.cityofchicago.org/). My data set is the School Progress Reports for school years 2015-16, 2016-17, 2017-18, 2018-19, 2021-22, and 2022-23. I selected these school years because before 2015, the reports were separated by school level (elementary, high, etc). I hope that by selecting the more recent format, I will be able to compare better across time. As such, I would like to join the data sets together, considering the progress reports are fairly similar for each year. Looking through the separate reports for each school year, I saw a lot of variables across the schooIl years with the same names. As long as the question metrics were measured by the same standards, I will be able to combine the variables.
+
+**Citations:**
+
+City of Chicago (2023). *Chicago Public Schools - School Progress Reports SY1516* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1516](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
+
+City of Chicago (2022). *Chicago Public Schools - School Progress Reports SY1617* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1617](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
+
+City of Chicago (2022). *Chicago Public Schools - School Progress Reports SY1718* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1718](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
+
+City of Chicago (2022). *Chicago Public Schools - School Progress Reports SY1819* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1819](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
+
+City of Chicago (2022). *Chicago Public Schools - School Progress Reports SY2122* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2122](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
+
+City of Chicago (2023). *Chicago Public Schools - School Progress Reports SY2223* \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223>
 
 ## Why this data
 
-Blah blah blah^[another footnote]
+I chose this data because I have an interest in public education and being able to combine qualitative and quantitative evidence to better understand and improve the education system. Chicago is the third-largest school district in America, with 341,382 students. Like many metropolitan school systems, they are underfunded and inequitable based on a variety of factors. They also have a testing system to enroll in high schools, something that is unique to the district and causes areas for inequity early on in a student’s educational career. Historically, there have been many movements within Chicago, and schools are a primary topic for local politics - for example, the most recent mayoral race was between a candidate who was formerly CEO of Chicago Public Schools versus a candidate who was an organizer for the Chicago Teacher’s Union after being a teacher himself. 
+
+I am curious to see how the data has changed across time, especially with test scores. I am also interested in how testing scores interact with people's satisfaction with the school (is there a correlation?). I am would consider adding more data from [data.gov](https://catalog.data.gov/organization/city-of-chicago?q=profile&tags=cps&sort=score+desc%2C+metadata_modified+desc) to include the profile of the schools to be cross examined with variables like testing scores. I would like to note that while arguments and theories in education should be data-driven, that is only a piece of the picture. Relying on only data as a resource can cause educators to focus on the wrong things, so any claims about the educational system should ideally be holistic to be the most informative and thoughtful. I recognize that this project is just the quantitative data component and more qualitative research should be provided in conjunction for a more robust exploration.
+
 
 ## Data quality & complexity check
 
-Blah blah blah
+```{r}
+#| label: load
+
+# load data and packages
+library(tidyverse)
+library(janitor)
+library(naniar)
+
+cps_progress_report_sy1516 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1516.csv") |> 
+  clean_names()
+
+cps_progress_report_sy1617 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1617.csv") |> 
+  clean_names()
+
+cps_progress_report_sy1718 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1718.csv") |> 
+  clean_names()
+
+cps_progress_report_sy1819 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1819.csv") |> 
+  clean_names()
+
+cps_progress_report_sy2122 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY2122.csv") |> 
+  clean_names()
+
+cps_progress_report_sy2223 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY2223.csv") |> 
+  clean_names()
+
+```
+```{r}
+#| label: missingness
+
+# missingness for sy 15-16
+vis_miss(cps_progress_report_sy1516) + ggtitle("CPS Progress Report Missingness SY 15-16")
+# missingness for sy 16-17
+vis_miss(cps_progress_report_sy1617) + ggtitle("CPS Progress Report Missingness SY 16-17")
+# missingness for sy 17-18
+vis_miss(cps_progress_report_sy1718) + ggtitle("CPS Progress Report Missingness SY 17-18")
+# missingness for sy 18-19
+vis_miss(cps_progress_report_sy1819) + ggtitle("CPS Progress Report Missingness SY 18-19")
+# missingness for sy 21-22
+vis_miss(cps_progress_report_sy2122) + ggtitle("CPS Progress Report Missingness SY 21-22")
+# missingness for sy 22-23
+vis_miss(cps_progress_report_sy2223) + ggtitle("CPS Progress Report Missingness SY 22-23")
+
+
+```
+
+In each school report data set, there are between 153 and 182 variables. There are between 651 and 670 observations, each representing a public school in Chicago. There are between 59 and 109 numeric variables in the data set, so ranging between a third to half of the variables, the rest being categorical. When looking at the missingness, the pre-pandemic years have missingness of less than 25% of the observations. Some of the missingness comes from schools not having test scores, but most of it comes from NA values for the various awards schools can win. This makes sense, as not all schools can earn an award each year. Espeically if the award is selective, most schools will not win one, therefore creating NA values.
+
+Something more concerning is that the most recent school years, 2021-22 and 2022-23 have missingness of around 60%. The missingness is due to missing scores for reading and math growth, as well as projected reading and math growth. This could be due to the fact that it may not be possible to quantify growth if students were not being tracked during the pandemic, meaning that there was not a starting point to compare to each student's current state, metric testing was not formatted for remote purposes. There seems to be a lack of testing data in general for CPS post pandemic, as the most recent publicly accessible data I could access was from 2019. There is data from school surveys on student and teacher satisfaction with the schools for all reports. 
 
 ## Potential data issues
 
-Blah blah blah
+The merging of the data will be a challenge, I will have to thoughtfully select which variables I want to utilize. Additionally, the testing data being absent from the post-pandemic years will make it difficult to compare schools pre and post-pandemic. There is also no data in these reports on the identities of students, such as income level, race, gender identity, etc. These are important factors when it comes to understanding education, and ones that I may consider adjoining to the data set if the missingness from recent school years begins to pose an issue to the substantiveness of the project.
+
 
 ## Misc
 
-Blah Blah
+The City of Chicago also includes [school profile information](https://catalog.data.gov/organization/city-of-chicago?q=profile&tags=cps&sort=score+desc%2C+metadata_modified+desc) as a part of its public database. I will consider adding that as part of my data set (matching up the school name from both data sets to merge the data) to allow for more impacting variables to be considered in my exploration.
