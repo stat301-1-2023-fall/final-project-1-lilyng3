@@ -3,96 +3,72 @@ library(tidyverse)
 library(janitor)
 library(naniar)
 
+# for reading sheets
+library(readxl)
+library(writexl)
+
 # original data -----------------------------------------------------------
-# sy 17-18
-sy1718_progress_report <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1718.csv") |> 
+
+ela_scores <- read_excel("data/raw/iar-parcc_2015to2023_schoollevel.xlsx", sheet = "IAR-PARCC ELA Results", skip = 1) |> 
   clean_names()
 
-sy1718_school_profile <- read.csv("data/Chicago_Public_Schools_-_School_Profile_Information_SY1718.csv") |> 
+math_scores <- read_excel("data/raw/iar-parcc_2015to2023_schoollevel.xlsx", sheet = "IAR-PARCC Math Results", skip = 1) |> 
   clean_names()
 
-# sy 18-19
-sy1819_progress_report <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1819.csv") |> 
+sy1718 <- read.csv("data/raw/Chicago_Public_Schools_-_School_Profile_Information_SY1718.csv") |> 
   clean_names()
 
-sy1819_school_profile <- read.csv("data/Chicago_Public_Schools_-_School_Profile_Information_SY1819.csv") |> 
+sy1819 <- read.csv("data/raw/Chicago_Public_Schools_-_School_Profile_Information_SY1819.csv") |> 
   clean_names()
 
-# sy 21-22
-sy2122_progress_report <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY2122.csv") |> 
+sy2122 <- read.csv("data/raw/Chicago_Public_Schools_-_School_Profile_Information_SY2122.csv") |> 
   clean_names()
 
-sy2122_school_profile <- read.csv("data/Chicago_Public_Schools_-_School_Profile_Information_SY2122.csv") |> 
+sy2223 <- read.csv("data/raw/Chicago_Public_Schools_-_School_Profile_Information_SY2223.csv") |> 
   clean_names()
 
-# sy 22-23
-sy2223_progress_report <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY2223.csv") |> 
-  clean_names()
+# cleaned data ------------------------------------------------------------
 
-sy2223_school_profile <- read.csv("data/Chicago_Public_Schools_-_School_Profile_Information_SY2223.csv") |> 
-  clean_names()
+keep <- c("school_id", "school_name", "year", "number_students_tested", "percent_did_not_meet", "percent_partially_met", "percent_approached_9", "percent_met", "percent_exceeded", "percent_met_or_exceeded_12")
 
-# cleaned + joined data ------------------------------------------------------------
-# sy 17-18 ----------------------------------------------------------------
-# progress report
-progress_report_remove_columns <- c("phone", "fax", "cps_school_profile", "website", "blue_ribbon_award_year", "excelerate_award_gold_year", "spot_light_award_year", "improvement_award_year", "excellence_award_year", "state_school_report_card_url", "other_metrics_year_1", "other_metrics_year_2")
+ela_scores_clean <- ela_scores |> 
+  filter(year == 2023 | year == 2022 |year == 2019 | year == 2018,
+         test_name == "Combined ELA Grades 3-8") |> 
+  select(keep) |> 
+  rename(percent_approached = percent_approached_9,
+         percent_met_or_exceeded = percent_met_or_exceeded_12)
 
-sy1718_clean_progress_report <- sy1718_progress_report |> 
-  select(-one_of(progress_report_remove_columns))
+math_scores_clean <- math_scores |> 
+  filter(year == 2023 | year == 2022 |year == 2019 | year == 2018,
+         test_name == "Combined Math Grades 3-8") |> 
+  select(keep) |> 
+  rename(percent_approached = percent_approached_9,
+         percent_met_or_exceeded = percent_met_or_exceeded_12)
 
-# school profile
-school_profile_remove_columns <- c("legacy_unit_id", "finance_id", "summary", "administrator_title", "administrator", "secondary_contact_title", "secondary_contact", "phone", "fax", "cps_school_profile", "website", "facebook", "twitter", "youtube", "pinterest", "freshman_start_end_time", "after_school_hours", "earliest_drop_off_time", "transportation_bus", "transportation_el", "transportation_metra", "third_contact_title", "third_contact_name", "fourth_contact_title", "fourth_contact_name", "fifth_contact_title", "fifth_contact_name", "sixth_contact_title", "sixth_contact_name", "seventh_contact_title", "seventh_contact_name", "is_go_cps_elementary", "is_go_cps_participant", "is_go_cps_pre_k", "is_go_cps_high_school", "open_for_enrollment_date", "closed_for_enrollment_date")
+profile_keep <- c("school_id", "short_name", "long_name", "primary_category", "student_count_total", "student_count_low_income", "student_count_black", "student_count_hispanic", "student_count_white", "student_count_asian", "student_count_native_american", "student_count_other_ethnicity", "student_count_asian_pacific_islander", "student_count_multi", "student_count_hawaiian_pacific_islander", "student_count_ethnicity_not_available")
 
-sy1718_clean_school_profile <- sy1718_school_profile |> 
-  select(-one_of(school_profile_remove_columns))
+data_frames <- list(sy1718 = sy1718, sy1819 = sy1819, sy2122 = sy2122, sy2223 = sy2223)
 
-# joined data
-sy1718_full <- full_join(sy1718_clean_school_profile, sy1718_clean_progress_report, by = c("school_id", "short_name", "long_name", "primary_category", "location"))
+for (name in names(data_frames)) {
+  year_suffix <- substr(name, 3, 4)
+  year <- as.integer(paste0("20", year_suffix)) + 1
+  
+  cleaned_data <- data_frames[[name]] |> 
+    select(all_of(profile_keep)) |> 
+    rename(school_name = short_name) |> 
+    mutate(year = year,
+           .after = school_name)
+  
+  new_var_name <- paste0(name, "_clean")
+  
+  assign(new_var_name, cleaned_data)
+}
 
+sy_clean <- rbind(sy1718_clean, sy1819_clean, sy2122_clean, sy2223_clean)
 
-# sy 18-19 ----------------------------------------------------------------
-# progress report
-progress_report_remove_columns <- c("phone", "fax", "cps_school_profile", "website", "blue_ribbon_award_year", "excelerate_award_gold_year", "spot_light_award_year", "improvement_award_year", "excellence_award_year", "state_school_report_card_url", "other_metrics_year_1", "other_metrics_year_2")
+scores <- full_join(ela_scores_clean, math_scores_clean, by = c("school_id", "school_name", "year"), suffix = c("_ela", "_math"))
 
-sy1819_clean_progress_report <- sy1819_progress_report |> 
-  select(-one_of(progress_report_remove_columns))
+cps_data <- inner_join(sy_clean, scores, by = c("school_id", "school_name", "year"))
 
-# school profile
-school_profile_remove_columns <- c("legacy_unit_id", "finance_id", "summary", "administrator_title", "administrator", "secondary_contact_title", "secondary_contact", "phone", "fax", "cps_school_profile", "website", "facebook", "twitter", "youtube", "pinterest", "freshman_start_end_time", "after_school_hours", "earliest_drop_off_time", "transportation_bus", "transportation_el", "transportation_metra", "third_contact_title", "third_contact_name", "fourth_contact_title", "fourth_contact_name", "fifth_contact_title", "fifth_contact_name", "sixth_contact_title", "sixth_contact_name", "seventh_contact_title", "seventh_contact_name", "is_go_cps_elementary", "is_go_cps_participant", "is_go_cps_pre_k", "is_go_cps_high_school", "open_for_enrollment_date", "closed_for_enrollment_date")
-
-sy1819_clean_school_profile <- sy1819_school_profile |> 
-  select(-one_of(school_profile_remove_columns))
-
-# joined data
-sy1819_full <- full_join(sy1819_clean_progress_report, sy1819_clean_school_profile, by = c("school_id", "short_name", "long_name", "primary_category", "address", "city", "state", "zip"))
-
-# sy 21-22 ----------------------------------------------------------------
-# progress report
-progress_report_remove_columns <- c("phone", "fax", "cps_school_profile", "website", "blue_ribbon_award_year", "excelerate_award_gold_year", "spot_light_award_year", "improvement_award_year", "excellence_award_year", "state_school_report_card_url", "other_metrics_year_1", "other_metrics_year_2")
-
-sy2122_clean_progress_report <- sy2122_progress_report |> 
-  select(-one_of(progress_report_remove_columns))
-
-# school profile
-school_profile_remove_columns <- c("legacy_unit_id", "finance_id", "summary", "administrator_title", "administrator", "secondary_contact_title", "secondary_contact", "phone", "fax", "cps_school_profile", "website", "facebook", "twitter", "youtube", "pinterest", "freshman_start_end_time", "after_school_hours", "earliest_drop_off_time", "transportation_bus", "transportation_el", "transportation_metra", "third_contact_title", "third_contact_name", "fourth_contact_title", "fourth_contact_name", "fifth_contact_title", "fifth_contact_name", "sixth_contact_title", "sixth_contact_name", "seventh_contact_title", "seventh_contact_name", "is_go_cps_elementary", "is_go_cps_participant", "is_go_cps_pre_k", "is_go_cps_high_school", "open_for_enrollment_date", "closed_for_enrollment_date")
-
-sy2122_clean_school_profile <- sy2122_school_profile |> 
-  select(-one_of(school_profile_remove_columns))
-
-# joined data
-sy2122_full <- full_join(sy2122_clean_progress_report, sy2122_clean_school_profile, by = c("school_id", "short_name", "long_name", "primary_category", "address", "city", "state", "zip"))
-
-# sy 22-23 ----------------------------------------------------------------
-progress_report_remove_columns <- c("phone", "fax", "cps_school_profile", "website", "blue_ribbon_award_year", "excelerate_award_gold_year", "spot_light_award_year", "improvement_award_year", "excellence_award_year", "state_school_report_card_url", "other_metrics_year_1", "other_metrics_year_2")
-
-sy2223_clean_progress_report <- sy2223_progress_report |> 
-  select(-one_of(progress_report_remove_columns))
-
-# school profile
-school_profile_remove_columns <- c("legacy_unit_id", "finance_id", "summary", "administrator_title", "administrator", "secondary_contact_title", "secondary_contact", "phone", "fax", "cps_school_profile", "website", "facebook", "twitter", "youtube", "pinterest", "freshman_start_end_time", "after_school_hours", "earliest_drop_off_time", "transportation_bus", "transportation_el", "transportation_metra", "third_contact_title", "third_contact_name", "fourth_contact_title", "fourth_contact_name", "fifth_contact_title", "fifth_contact_name", "sixth_contact_title", "sixth_contact_name", "seventh_contact_title", "seventh_contact_name", "is_go_cps_elementary", "is_go_cps_participant", "is_go_cps_pre_k", "is_go_cps_high_school", "open_for_enrollment_date", "closed_for_enrollment_date")
-
-sy2223_clean_school_profile <- sy2223_school_profile |> 
-  select(-one_of(school_profile_remove_columns))
-
-# joined data
-sy2223_full <- full_join(sy2223_clean_progress_report, sy2223_clean_school_profile, by = c("school_id", "short_name", "long_name", "primary_category", "address", "city", "state", "zip"))
+# save cleaned data -------------------------------------------------------
+write.csv(cps_data, file = "data/cps_data.csv", row.names = FALSE)

@@ -26,13 +26,9 @@ from: markdown+emoji
 
 ## Data source
 
-My data source is the City of Chicago's Public Schools (CPS). The data was found on the official United States Government website, [data.gov](https://data.gov/). It can also be found on the [City of Chicago's Data Portal](https://data.cityofchicago.org/). My data set is the School Progress Reports for school years 2015-16, 2016-17, 2017-18, 2018-19, 2021-22, and 2022-23. I selected these school years because before 2015, the reports were separated by school level (elementary, high, etc). I hope that by selecting the more recent format, I will be able to compare better across time. As such, I would like to join the data sets together, considering the progress reports are fairly similar for each year. Looking through the separate reports for each school year, I saw a lot of variables across the schooI years with the same names. As long as the question metrics were measured by the same standards, I will be able to combine the variables.
+My data source is the City of Chicago's Public Schools (CPS). The data was found on the official United States Government website, [data.gov](https://data.gov/). It can also be found on the [City of Chicago's Data Portal](https://data.cityofchicago.org/). My data set is the School Progress Reports for school years 2015-16, 2016-17, 2017-18, 2018-19, 2021-22, and 2022-23. I selected these school years because before 2015, the reports were separated by school level (elementary, high, etc). I hope that by selecting the more recent format, I will be able to compare better across time. As such, I would like to join the data sets together, considering the progress reports are fairly similar for each year. I will also consider joining the School Profile data sets which provide demographic information which could be interesting to cross analyze.
 
 **Citations:**
-
-City of Chicago (2023). *Chicago Public Schools - School Progress Reports SY1516* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1516](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
-
-City of Chicago (2022). *Chicago Public Schools - School Progress Reports SY1617* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1617](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
 
 City of Chicago (2022). *Chicago Public Schools - School Progress Reports SY1718* \[Data set\]. [https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy1718](https://catalog.data.gov/dataset/chicago-public-schools-school-progress-reports-sy2223)
 
