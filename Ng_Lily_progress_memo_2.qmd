@@ -21,35 +21,17 @@ from: markdown+emoji
 ::: {.callout-tip icon="false"}
 ## Github Repo Link
 
-[Final ProjectProgress Memo Github Repo](https://github.com/stat301-1-2023-fall/final-project-1-lilyng3)
+[Final Project Progress Memo Github Repo](https://github.com/stat301-1-2023-fall/final-project-1-lilyng3)
 :::
 
-## Data source
+## Data Source
 
-## Why this data
+## Data Cleaning
 
-## Data quality & complexity check
-```{r}
-#| label: load
+## Research Question
 
-# load data and packages
-library(tidyverse)
-library(janitor)
-library(naniar)
+## Exploratory Data Analysis
 
-cps_progress_report_sy1718 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1718.csv") |> 
-  clean_names()
+## Progress Summary
 
-cps_progress_report_sy1819 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY1819.csv") |> 
-  clean_names()
-
-cps_progress_report_sy2122 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY2122.csv") |> 
-  clean_names()
-
-cps_progress_report_sy2223 <- read.csv("data/Chicago_Public_Schools_-_School_Progress_Reports_SY2223.csv") |> 
-  clean_names()
-
-```
-## Potential data issues
-
-## Misc
+## Next Steps
