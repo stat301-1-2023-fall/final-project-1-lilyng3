@@ -26,12 +26,181 @@ from: markdown+emoji
 
 ## Data Source
 
+Since Progress Memo 1, I have shifted my data source. In Memo 1, I mentioned joining the school report data, which I cited, with the school profile data also available from Chicago Public Schools (CPS). I will expand on my progress later in this memo, but essentially I figured out that the original School Report data was not going to provide any scores to analyze post-pandemic, which was one of my interests with this data set. I ended up finding more data from CPS that I am using for the test scores instead. I am citing all my data sets below:
+
+City of Chicago (2023). IAR-PARCC Performance Levels and Sub-scores Report 2015 to 2023 School Level \[Data set\]. <https://www.cps.edu/globalassets/cps-pages/about-cps/district-data/metrics/assessment-reports/iar-parcc_2015to2023_schoollevel.xlsx> 
+
+City of Chicago (2022). Chicago Public Schools - School Profile Information SY1718 \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy1718> 
+
+City of Chicago (2022). Chicago Public Schools - School Profile Information SY1819 \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy1819> 
+
+City of Chicago (2022). Chicago Public Schools - School Profile Information SY2122 \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy2122> 
+
+City of Chicago (2022). Chicago Public Schools - School Profile Information SY2223 \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy2223> 
+
 ## Data Cleaning
+
+To create one usable data set, I first had to figure out how to import Excel files and access the correct sheet. Using the textbook, I followed the example and figured out how to import the data in a way that would show up neatly. Considering that there are a lot of repetitive variable names in the spreadsheet, I also had to select which testing scores I wanted as well as clean the variable names. I chose to keep the scores from school years 2017-18, 2018-19, 2021-22, and 2022-23. I chose these because they matched the availability of school profile data, and it involved two years pre and post-pandemic. There is no public data available for any school year that involves 2020. After cleaning the test scores, I cleaned the school profile data sets by selecting only the variables of interest, ones that overlapped with the testing data as well as the demographic information that the dataset provides, mainly socioeconomic status and racial demographics. I then combined the scores and the school profile data together by matching school IDs and names, as well as the year each data point occurred. The cleaned and compiled data set is available in the 'data' folder, with the original raw data from both my Memo 1 and Memo 2 in the 'raw' folder.
 
 ## Research Question
 
+I am going to explore two different factors to see if they influence the test scores of CPS students. The first is the pandemic, where at its most intense, school was moved to remote or online for a long period of time. The second is identity-based influences, such as if race or socioeconomic status affects testing scores. Finally, I am curious to combine the two factors. Discussion has revolved around how the pandemic may have exacerbated the inequities students already experienced in the education system. I am interested to see if there will be greater gaps post-pandemic between schools with students of primarily privileged identities and schools with greater populations of marginalized students.
+
 ## Exploratory Data Analysis
+
+```{r}
+#| label: load-data
+# packages
+library(tidyverse)
+
+# data
+cps <- read_rds("data/cps_data.rds")
+```
+
+To start, I wanted to look at the averages of each race, as well as the percentages of each race, by school. I hope this will be useful later on as I look to further delve into race at the schools beyond just the primary race. Clearly, there are a lot of schools in my data set, so while this table doesn't provide succinct information as a graph would, it does allow for further exploration down the road using the data set the table was made out of.
+
+```{r}
+#| fig.cap: "Table 1: Racial Counts and Percentages By School"
+
+# find racial counts and percentages at each school
+racial_count <- cps |>
+  group_by(school_name) |>
+  summarize(
+    avg_black = round(mean(student_count_black), 1),
+    avg_hispanic = round(mean(student_count_hispanic), 1),
+    avg_white = round(mean(student_count_white), 1),
+    avg_asian = round(mean(student_count_asian), 1),
+    avg_native_american = round(mean(student_count_native_american), 1),
+    avg_other_ethnicity = round(mean(student_count_other_ethnicity), 1),
+    avg_asian_pacific_islander = round(mean(student_count_asian_pacific_islander), 1),
+    avg_multiracial = round(mean(student_count_multi), 1),
+    avg_hawaiian_pacific_islander = round(mean(student_count_hawaiian_pacific_islander), 1),
+    avg_not_available = round(mean(student_count_ethnicity_not_available), 1),
+    
+    avg_black_pct = round(mean((student_count_black/student_count_total) * 100), 1),
+    avg_hispanic_pct = round(mean((student_count_hispanic/student_count_total) * 100), 1),
+    avg_white_pct = round(mean((student_count_white/student_count_total) * 100), 1),
+    avg_asian_pct = round(mean((student_count_asian/student_count_total) * 100), 1),
+    avg_native_american = round(mean((student_count_native_american/student_count_total) * 100), 1),
+    avg_other_ethnicity = round(mean((student_count_other_ethnicity/student_count_total) * 100), 1),
+    avg_asian_pacific_islander = round(mean((student_count_asian_pacific_islander/student_count_total) * 100), 1),
+    avg_multiracial = round(mean((student_count_multi/student_count_total) * 100), 1),
+    avg_hawaiian_pacific_islander = round(mean((student_count_hawaiian_pacific_islander/student_count_total) * 100), 1),
+    avg_not_available = round(mean((student_count_ethnicity_not_available/student_count_total) * 100), 1)
+  )
+
+racial_count |> 
+  DT::datatable()
+```
+
+First, I decided to look at the data for English language arts (ELA) and math scores across time. To do this, I took the averages across each year and then plotted them. I chose to focus on the percentage of students that meet the ELA and math standards because that is the goal for each student, to be at 'Meets Standard'. The years represent the second year in the school year, for example 2018 represents school year (SY) 2017-18.
+
+We can see that both ELA levels (Plot 1) and math levels (Plot 2) decreased post-pandemic, which is the years (2022 and 2023). We see a larger loss in math levels than ELA levels. We also see an incremental gain in SY 2022-23, so I am curious to see if we start to recover as the years go on. Additionally, we can see that on average, students are not meeting benchmark levels at all, regardless of the pandemic. 
+
+```{r}
+#| fig.cap: "Plot 1: Percentage of Students Meeting ELA Levels Over Years"
+pandemic_scores <- cps |> 
+  group_by(year) |> 
+  summarise(
+    avg_met_ela = mean(percent_met_ela, na.rm = TRUE),
+    avg_met_math = mean(percent_met_math, na.rm = TRUE),
+    avg_did_not_meet_ela = mean(percent_did_not_meet_ela, na.rm = TRUE),
+    avg_did_not_meet_math = mean(percent_did_not_meet_math, na.rm = TRUE)
+  )
+
+# ela
+ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_ela)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#66c2a5") +
+  labs(title = "Percentage of Students Meeting ELA Levels Over Years",
+       x = "Year",
+       y = "Average % Met Math Levels") +
+  theme_minimal()
+```
+
+In an ideal world, 100% would be the average for students meeting ELA and math levels. However, the levels of students meeting benchmark hover between 15-23% for ELA and 10-16% for math. So not only did math levels experience a larger loss on average, they also generally are met less by students.
+
+```{r}
+#| fig.cap: "Plot 2: Percentage of Students Meeting Math Levels Over Years"
+
+ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_math)) +
+geom_bar(stat = "identity", position = "dodge", fill = "#8da0cb") +
+  labs(title = "Percentage of Students Meeting Math Levels Over Years",
+       x = "Year",
+       y = "Average % Met Math Levels") +
+  theme_minimal()
+```
+
+Moving on to looking at the data by race, I first sorted schools by their primary racial makeup. That is, I compared the counts of students and selected the largest count (racial population) and then assigned it to a value relating to the largest racial group in each school. Before I compare the data across race, it is important to look at the counts themselves. There are overwhelmingly higher counts of Black and Latinx (Hispanic, due to census) students being the primary racial population over White and Asian studnets. There are very few primarily Asian schools, and when I examined the schools that did qualify, most were located in the Chinatown area of Chicago, which has a denser Asian population. The following table (Table 2) provides the number of schools categorized by primary racial makeup. 
+
+```{r}
+#| fig.cap: "Table 2: Count of Schools By Primary Racial Makeup"
+
+racial_groups <- c("student_count_black", "student_count_hispanic", "student_count_white", "student_count_asian", "student_count_native_american", "student_count_other_ethnicity","student_count_asian_pacific_islander", "student_count_multi", "student_count_hawaiian_pacific_islander", "student_count_ethnicity_not_available")
+
+cps_race <- cps |> 
+  mutate(
+    primary_race = apply(cps[, racial_groups], 1, function(row) {
+    names(row)[which.max(row)]})) |> 
+  mutate(primary_race = sub("student_count_", "", primary_race))
+
+cps_race |> 
+  group_by(year, primary_race) |> 
+  summarise(count = n()) |> 
+  gt::gt()
+
+pandemic_scores_race <- cps_race |> 
+  group_by(year, primary_race) |> 
+  summarise(
+    avg_met_ela = mean(percent_met_ela, na.rm = TRUE),
+    avg_met_math = mean(percent_met_math, na.rm = TRUE),
+    avg_did_not_meet_ela = mean(percent_did_not_meet_ela, na.rm = TRUE),
+    avg_did_not_meet_math = mean(percent_did_not_meet_math, na.rm = TRUE)
+  )
+```
+
+So being informed about the actual count of schools that had each primary racial makeup, I created visualizations similar to Plot 1 and Plot 2, but further faceted by the factor of the school's primary racial makeup. We still see the trend from before of a dip in the percentage of students meeting the goal level, and a slight recovery in 2022-23, which makes sense as Plots 1 & 2 were averages of the data. However, we can now see that faceting by race shows a significant gap in the percentage of students meeting levels. Black and Latinx students follow close the the average numbers of around 20% or less, which follows the observation of there being many more majority Black and Latinx schools in the data set, so they have more influence over the average. We now see that White and Asian students are meeting levels for ELA and math at around 40% of students, much higher than the Black and Latinx averages.
+
+```{r}
+#| fig.cap: "Plot 3: Percentage of Students Meeting ELA Levels By Race Over Years"
+
+# ela
+ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_ela, fill = primary_race)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Students Meeting ELA Levels By Race Over Time",
+       x = "Year",
+       y = "Average % Met ELA Levels") +
+  theme_minimal() +
+  facet_wrap(~ primary_race, 
+             labeller = labeller(primary_race = c("black" = "Black", "white" = "White", "asian" = "Asian", "hispanic" = "Hispanic"))) +
+  scale_fill_brewer(palette = "Set2") + 
+  theme(legend.position = "none")
+```
+
+
+```{r}
+#| fig.cap: "Plot 4: Percentage of Students Meeting Math Levels By Race Over Years"
+
+# math
+ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_math, fill = primary_race)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Students Meeting Math Levels By Race Over Time",
+       x = "Year",
+       y = "Average % Met Math Levels") +
+  theme_minimal() +
+  facet_wrap(~ primary_race, 
+             labeller = labeller(primary_race = c("black" = "Black", "white" = "White", "asian" = "Asian", "hispanic" = "Hispanic"))) +
+  scale_fill_brewer(palette = "Set2") + 
+  theme(legend.position = "none")
+```
 
 ## Progress Summary
 
+I had already cleaned and joined my previous data selection, but it ended up being a massive and nonspecific file that was stressful to work with. Because of the missingness in my data, I became worried and removed only the variables that would not be useful in the slightest, keeping all other variables. The issue is, that meant each data set had over 600 schools and 200 variables, per year. I assigned a suffix to each year and then had a massive data set with over 1,000 variables, something that was not practical at all. After further reflection, research, and talking with Professor Sass, I decided to narrow my interests to select fewer variables, and add a year variable instead of using suffixes, something that made my data a lot more succinct. I had cleaned all my data and compiled it, but I was still unsatisfied with the lack of test scores.
+
+As aforementioned, in this memo, I introduced some new raw data sources. I kept the school profile data, which provides demographic information, but I swapped the school report data for the IAR-PARCC data. This is because, as mentioned in Memo 1, there were a lot of testing scores (majority) missing from the data set post-pandemic. Originally, I thought this may be due to not having systems reinstated to cull the testing data, considering how much recovery the school system has had to make from the effects of the pandemic. This was concerning to my exploration because it did not allow me to explore testing scores post-pandemic, which would have made any correlation impossible. However, upon further research, I learned that CPS stopped using NWEA-based testing after the pandemic and instead switched to the IAR, hence why the NWEA-specific data was missing post-pandemic. I eventually found the excel file that contained testing scores aggregated across school years from 2015 to 2023. Upon discovering this, I completely scrapped my old cleaned data and restarted, something that was time-consuming but a valuable learning process. Considering this testing occurs in the Spring of each school year, I selected years 2018, 2019, 2022, and 2023 from the data set to join with the school profile data. Now, I have both the demographic data and the testing scores in one data set.
+
+I did a lot of data manipulation to get my graphs and tables, often having to take averages in order to make a correct plot. I also made a variable indicating the primary racial makeup of the school, which allowed me to facet graphs by race. I have written notes in the R file about my progress, and I will note that some of my processes I could not figure out how to make more efficient, due to my lack of knowledge about loops. However, I tried my best to implement them and look for solutions that could teach me how to use them as much as possible.
+
 ## Next Steps
+
+I want my graphics and data to be well organized and build a logical exploration. For example, starting out on the year level and then diving in by race, etc. I still need to breakdown the scores by just race, like I did with the just year one. I would like to do more work with breakdowns of schools by race, as opposed to just primary race, to get a better idea of the trends in the data as well. I would also like to explore the trends in ELA against the trends in math, to see if they follow each other or not. I would like to add more background regarding race, perhaps the census, and other social implications that I feel are important to know about when analyzing data. I would also like to add more advanced features to my document, such as pulling in the plots from an image and linking them within my document, etc.
