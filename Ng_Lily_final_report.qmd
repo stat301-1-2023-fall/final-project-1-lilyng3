@@ -1,0 +1,39 @@
+---
+title: "The Gap: The Effect of Race and The Pandemic on CPS Learning"
+subtitle: |
+  | Final Project 
+  | Data Science 1 with R (STAT 301-1)
+author: "Lily Ng"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+
+from: markdown+emoji 
+---
+
+::: {.callout-tip icon="false"}
+## Github Repo Link
+
+[Final Project Github Repo](https://github.com/stat301-1-2023-fall/final-project-1-lilyng3)
+:::
+
+## Introduction
+
+## Data overview & quality
+
+## Explorations
+
+## Conclusion
+
+## References — if needed
+
+## Appendix: technical info — if needed
+
+## Appendix: extra explorations — if needed
