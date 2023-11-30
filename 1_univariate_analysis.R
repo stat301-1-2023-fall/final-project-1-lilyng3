@@ -5,106 +5,120 @@ library(naniar)
 
 cps <- read_rds("data/cps_data.rds")
 
-# pre and post pandemic scores
-pandemic_scores <- cps |> 
-  group_by(year) |> 
-  summarise(
-    avg_met_ela = mean(percent_met_ela, na.rm = TRUE),
-    avg_met_math = mean(percent_met_math, na.rm = TRUE),
-    avg_did_not_meet_ela = mean(percent_did_not_meet_ela, na.rm = TRUE),
-    avg_did_not_meet_math = mean(percent_did_not_meet_math, na.rm = TRUE)
+# note: counting this as univariate analysis although this is faceted by year, because this makes the data more clear
+
+# sorting data ------------------------------------------------------------
+# by race
+racial_groups <- c("student_count_black", "student_count_hispanic", "student_count_white", "student_count_asian", "student_count_native_american", "student_count_other_ethnicity","student_count_asian_pacific_islander", "student_count_multi", "student_count_hawaiian_pacific_islander", "student_count_ethnicity_not_available")
+
+# by ela score
+ela_score <- c("percent_did_not_meet_ela", "percent_partially_met_ela", "percent_approached_ela", "percent_met_ela", "percent_exceeded_ela", "percent_met_or_exceeded_ela")
+
+# by math score
+math_score <- c("percent_did_not_meet_math", "percent_partially_met_math", "percent_approached_math", "percent_met_math", "percent_exceeded_math", "percent_met_or_exceeded_math")
+
+cps_sorted <- cps |> 
+  mutate(
+    primary_race = apply(cps[, racial_groups], 1, function(row) {
+      names(row)[which.max(row)]}),
+    primary_ela = names(cps[, ela_score])[max.col(cps[, ela_score], "last")],
+    primary_math = names(cps[, math_score])[max.col(cps[, math_score], "last")]
+  ) |> 
+  mutate(primary_race = sub("student_count_", "", primary_race)) |> 
+  filter(school_name != "U OF C - WOODLAWN HS")
+
+cps_sorted <- cps_sorted |> 
+  mutate(
+    primary_race = factor(primary_race),
+    primary_ela = factor(primary_ela),
+    primary_math = factor(primary_math)
   )
 
-# ela
-ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_ela)) +
-  geom_bar(stat = "identity", position = "dodge", fill = "#66c2a5") +
-  labs(title = "Percentage of Students Meeting ELA Levels Over Years",
-       x = "Year",
-       y = "Average % Met Math Levels") +
-  theme_minimal()
+# how many schools --------------------------------------------------------
+num_unique_schools <- cps_sorted |> 
+  distinct(school_name) |> 
+  count()
+# 500 schools
 
-# focusing on meeting levels as a standard
-# ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_did_not_meet_ela)) +
-#   geom_bar(stat = "identity", position = "dodge", fill = "darkmagenta") +
-#   labs(title = "Percentage of Students Not Meeting ELA Levels Over Years",
-#        x = "Year",
-#        y = "% Did Not Meet ELA Levels") +
-#   theme_minimal()
+# level of school ----------------------------------------------------------
+# issue is this is across all data points, which is across four years. therefore, it will represent schools multiple times
 
-ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_math)) +
-  geom_bar(stat = "identity", position = "dodge", fill = "#8da0cb") +
-  labs(title = "Percentage of Students Meeting Math Levels Over Years",
-       x = "Year",
-       y = "Average % Met Math Levels") +
-  theme_minimal()
+cps |> 
+  mutate(primary_category = factor(primary_category, levels = c("ES", "MS", "HS"))) |> 
+  ggplot(aes(x = primary_category, fill = primary_category)) +
+  geom_bar() + 
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(
+    title = "Distribution of Levels of Schooling",
+    x = "School Level",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+ scale_x_discrete(labels = c("Elementary", "Middle School", "High School")) +
+  facet_wrap(~ year)
 
-# ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_did_not_meet_math)) +
-#   geom_bar(stat = "identity", position = "dodge", fill = "darkmagenta") +
-#   labs(title = "Percentage of Students Not Meeting Math Levels Over Years",
-#        x = "Year",
-#        y = "% Did Not Meet Math Levels") +
-#   theme_minimal()
+# primary race --------------------------------------------------------------------
+cps_sorted |> 
+  ggplot(aes(x = primary_race, fill = primary_race)) + 
+  geom_bar() + 
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Distribution of Primary Race",
+    x = "Primary Race",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) +
+  facet_wrap(~ year)
 
-# work section ------------------------------------------------------------
+# ela scores --------------------------------------------------------------
+# cps_sorted |>
+#   ggplot(aes(x = primary_ela, fill = primary_ela)) +
+#   geom_bar() +
+#   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+#   scale_fill_brewer(palette = "Set2") +
+#   labs(
+#     title = "Distribution of Primary ELA Scores",
+#     x = "Primary ELA Score",
+#     y = "Count"
+#   ) +
+#   theme_minimal() +
+#   theme(legend.position = "none") +
+#   facet_wrap(~ year)
+# +
+#   scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) 
 
-# table with racial demographic data
-# cps |>
-#   mutate(
-#     black = student_count_black,
-#     hispanic = student_count_hispanic,
-#     white = student_count_white,
-#     asian = student_count_asian,
-#     native_american = student_count_native_american,
-#     other_ethnicity = student_count_other_ethnicity,
-#     asian_pacific_islander = student_count_asian_pacific_islander,
-#     multiracial = student_count_multi,
-#     hawaiian_pacific_islander = student_count_hawaiian_pacific_islander,
-#     not_available = student_count_ethnicity_not_available
-#   ) |>
-#   select(black, hispanic, white, asian, native_american, other_ethnicity, asian_pacific_islander, multiracial, hawaiian_pacific_islander, not_available) |>
-#   DT::datatable()
+cps_sorted |> 
+  ggplot(aes(x = factor(primary_ela, levels = c("percent_did_not_meet_ela", "percent_partially_met_ela", "percent_approached_ela", "percent_met_or_exceeded_ela")), fill = primary_ela)) + 
+  geom_bar() + 
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Distribution of Primary ELA Scores",
+    x = "Primary ELA Score",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("% Did Not Meet", "% Partially Met", "% Approached", "% Met or Exceeded")) +
+  facet_wrap(~ year)
 
-# racial_count <- cps |>
-#   group_by(school_name) |>
-#   summarize(
-#     avg_black = mean(student_count_black),
-#     avg_hispanic = mean(student_count_hispanic),
-#     avg_white = mean(student_count_white),
-#     avg_asian = mean(student_count_asian),
-#     avg_native_american = mean(student_count_native_american),
-#     avg_other_ethnicity = mean(student_count_other_ethnicity),
-#     avg_asian_pacific_islander = mean(student_count_asian_pacific_islander),
-#     avg_multiracial = mean(student_count_multi),
-#     avg_hawaiian_pacific_islander = mean(student_count_hawaiian_pacific_islander),
-#     avg_not_available = mean(student_count_ethnicity_not_available),
-# 
-#     avg_black_pct = mean((student_count_black/student_count_total) * 100),
-#     avg_hispanic_pct = mean((student_count_hispanic/student_count_total) * 100),
-#     avg_white_pct = mean((student_count_white/student_count_total) * 100),
-#     avg_asian_pct = mean((student_count_asian/student_count_total) * 100),
-#     avg_native_american = mean((student_count_native_american/student_count_total) * 100),
-#     avg_other_ethnicity = mean((student_count_other_ethnicity/student_count_total) * 100),
-#     avg_asian_pacific_islander = mean((student_count_asian_pacific_islander/student_count_total) * 100),
-#     avg_multiracial = mean((student_count_multi/student_count_total) * 100),
-#     avg_hawaiian_pacific_islander = mean((student_count_hawaiian_pacific_islander/student_count_total) * 100),
-#     avg_not_available = mean((student_count_ethnicity_not_available/student_count_total) * 100)
-#   )
-
-# side by side bars, not as good visually as another solution
-# ggplot(cps_race, aes(x = as.factor(year), y = percent_did_not_meet_math, fill = primary_race)) +
-#   geom_bar(stat = "identity", position = "dodge") +
-#   labs(title = "Percentage of Students Not Meeting Math Levels Over Years By Race",
-#        x = "Year",
-#        y = "% Did Not Meet Math Levels") +
-#   theme_minimal()
-
-# graph does not make sense, have to take avgs
-# math
-# ggplot(cps, aes(x = as.factor(year), y = percent_met_math)) +
-#   geom_bar(stat = "identity", position = "dodge", fill = "midnightblue") +
-#   labs(title = "Percentage of Students Meeting Math Levels Over Years",
-#        x = "Year",
-#        y = "% Met Math Levels") +
-#   theme_minimal()
-
-
+# math scores -------------------------------------------------------------
+cps_sorted |> 
+  ggplot(aes(x = factor(primary_math, levels = c("percent_did_not_meet_math", "percent_partially_met_math", "percent_approached_math", "percent_met_or_exceeded_math")), fill = primary_math)) + 
+  geom_bar() + 
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Distribution of Primary Math Scores",
+    x = "Primary Math Score",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("% Did Not Meet", "% Partially Met", "% Approached", "% Met or Exceeded")) +
+  facet_wrap(~ year)
