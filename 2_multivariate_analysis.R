@@ -47,7 +47,7 @@ pandemic_scores <- cps |>
 
 # ela
 ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_ela)) +
-  geom_bar(stat = "identity", position = "dodge", fill = "#66c2a5") +
+  geom_bar(stat = "identity", position = "dodge", fill = "#4ab795") +
   labs(title = "Percentage of Students Meeting ELA Levels Over Years",
        x = "Year",
        y = "Average % Met Math Levels") +
@@ -62,7 +62,7 @@ ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_ela)) +
 #   theme_minimal()
 
 ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_math)) +
-  geom_bar(stat = "identity", position = "dodge", fill = "#8da0cb") +
+  geom_bar(stat = "identity", position = "dodge", fill = "#5773b2") +
   labs(title = "Percentage of Students Meeting Math Levels Over Years",
        x = "Year",
        y = "Average % Met Math Levels") +
@@ -75,8 +75,7 @@ ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_math)) +
 #        y = "% Did Not Meet Math Levels") +
 #   theme_minimal()
 
-# scores by race
-
+# scores by race by year
 cps_sorted |> 
   group_by(year, primary_race) |> 
   summarise(count = n()) |> 
@@ -91,7 +90,7 @@ pandemic_scores_race <- cps_sorted |>
     avg_did_not_meet_math = mean(percent_did_not_meet_math, na.rm = TRUE)
   )
 
-# ela
+# ela barplot
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_ela, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Percentage of Students Meeting ELA Levels By Race Over Time",
@@ -103,7 +102,19 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_ela, fill = pr
   scale_fill_brewer(palette = "Set2") + 
   theme(legend.position = "none")
 
-# math
+# ela line graph
+ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_ela, color = primary_race)) +
+  geom_point() +
+  geom_line(aes(group = primary_race)) +
+  labs(title = "Percentage of Students Meeting ELA Levels By Race Over Time",
+       x = "Year",
+       y = "Average % Met ELA Levels",
+       color = "Primary Race") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set2", labels = c("Asian", "Black", "Hispanic", "White")) + 
+  theme(legend.position = "bottom")
+
+# math barplot
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_math, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Percentage of Students Meeting Math Levels By Race Over Time",
@@ -114,6 +125,18 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_math, fill = p
              labeller = labeller(primary_race = c("black" = "Black", "white" = "White", "asian" = "Asian", "hispanic" = "Hispanic"))) +
   scale_fill_brewer(palette = "Set2") + 
   theme(legend.position = "none")
+
+# math line graph
+ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_math, color = primary_race)) +
+  geom_point() +
+  geom_line(aes(group = primary_race)) +
+  labs(title = "Percentage of Students Meeting Math Levels By Race Over Time",
+       x = "Year",
+       y = "Average % Met Math Levels",
+       color = "Primary Race") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set2", labels = c("Asian", "Black", "Hispanic", "White")) + 
+  theme(legend.position = "bottom")
 
 # work section ------------------------------------------------------------
 

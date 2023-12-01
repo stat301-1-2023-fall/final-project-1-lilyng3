@@ -60,20 +60,43 @@ cps |>
   facet_wrap(~ year)
 
 # primary race --------------------------------------------------------------------
+# bar chart version
+# cps_sorted |> 
+#   ggplot(aes(x = primary_race, fill = primary_race)) + 
+#   geom_bar() + 
+#   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+#   scale_fill_brewer(palette = "Set2") +
+#   labs(
+#     title = "Distribution of Primary Race",
+#     x = "Primary Race",
+#     y = "Count"
+#   ) +
+#   theme_minimal() +
+#   theme(legend.position = "none") +
+#   scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) +
+#   facet_wrap(~ year)
+
 cps_sorted |> 
-  ggplot(aes(x = primary_race, fill = primary_race)) + 
-  geom_bar() + 
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
-  scale_fill_brewer(palette = "Set2") +
+  ggplot(aes(x = "", fill = primary_race)) +
+  geom_bar(width = 1) +
+  geom_text(stat = 'count', 
+            aes(label = ..count..), 
+            position = position_stack(vjust = 0.5)) +
+  scale_fill_brewer(palette = "Set2", labels = c("Asian", "Black", "Hispanic", "White")) +
   labs(
     title = "Distribution of Primary Race",
-    x = "Primary Race",
-    y = "Count"
+    x = NULL,
+    y = NULL,
+    fill = "Primary Race"
   ) +
+  facet_wrap(~ year) +
+  coord_polar(theta = "y") +
   theme_minimal() +
-  theme(legend.position = "none") +
-  scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) +
-  facet_wrap(~ year)
+  theme(legend.position = "bottom",
+        axis.title = element_blank(), 
+        axis.text = element_blank(),   
+        axis.ticks = element_blank(),
+        panel.grid = element_blank())
 
 # ela scores --------------------------------------------------------------
 # cps_sorted |>
