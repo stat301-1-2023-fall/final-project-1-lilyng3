@@ -32,7 +32,57 @@ cps_sorted |>
   scale_fill_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) +
   theme_minimal()
 
+# met standards low income -----------------------------------------------------------
+# pre and post pandemic scores for met standards (met and exceeded)
+# looking at this since anyone past 'met' has reached the benchmark
+
+# average out scores into a new dataset for cleanliness/graphability
+pandemic_scores_lowincome <- cps_sorted |>
+  filter(title_one == TRUE) |>
+  group_by(year) |>
+  summarise(
+    avg_met_exceeded_ela = mean(percent_met_or_exceeded_ela, na.rm = TRUE),
+    avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE)
+  )
+
+# ela scores for only students who met the standards
+# combine the data for avg and low-income
+combined_data <-
+  merge(pandemic_scores, pandemic_scores_lowincome, by = c("year")) |>
+  pivot_longer(
+    cols = c("avg_met_exceeded_ela.x", "avg_met_exceeded_ela.y"),
+    names_to = "group_ela",
+    values_to = "avg_met_exceeded_ela"
+  ) |>
+  pivot_longer(
+    cols = c("avg_met_exceeded_math.x", "avg_met_exceeded_math.y"),
+    names_to = "group_math",
+    values_to = "avg_met_exceeded_math"
+  )
+
+# plot with combined data ela
+ggplot(combined_data,
+       aes(x = as.factor(year), y = avg_met_exceeded_ela, fill = group_ela)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Students Meeting ELA Levels Over Years By Income",
+       x = "Year",
+       y = "Average % Met ELA Levels") +
+  scale_fill_manual(values = c("#F7B4AD", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
+  theme_minimal()
+
+# math scores for only students who met the standards
+# plot with combined data math
+ggplot(combined_data,
+       aes(x = as.factor(year), y = avg_met_exceeded_math, fill = group_math)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Students Meeting Math Levels Over Years By Income",
+       x = "Year",
+       y = "Average % Met Math Levels") +
+  scale_fill_manual(values = c("#F7B4AD", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
+  theme_minimal()
+
 # low-income by race by score ------------------------------------------------------
+# put in additonal section
 # average out scores outside of graph for neatness
 pandemic_scores_race_lowincome <- cps_sorted |>
   filter(title_one == TRUE) |>

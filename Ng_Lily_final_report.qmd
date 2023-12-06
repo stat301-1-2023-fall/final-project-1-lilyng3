@@ -62,10 +62,7 @@ cps_sorted <- cps |>
     primary_ela = factor(primary_ela),
     primary_math = factor(primary_math)
   )
-```
 
-#### English Language Arts & Math Scores
-```{r}
 pandemic_scores <- cps |> 
   group_by(year) |> 
   summarise(
@@ -73,20 +70,147 @@ pandemic_scores <- cps |>
     avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE),
   )
 
-# ela
+pandemic_scores_race <- cps_sorted |> 
+  group_by(year, primary_race) |> 
+  summarise(
+    avg_met_exceeded_ela = mean(percent_met_or_exceeded_ela, na.rm = TRUE),
+    avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE)
+  )
+```
+
+#### English Language Arts & Math Scores
+
+In @fig-ela-distribution, we see 
+
+```{r}
+#| label: fig-ela
+#| fig-cap: Primary ELA Scores Across Time
+
+cps_sorted |> 
+  ggplot(aes(x = factor(primary_ela, levels = c("percent_did_not_meet_ela", "percent_partially_met_ela", "percent_approached_ela", "percent_met_or_exceeded_ela")))) + 
+  geom_bar(fill = "#F7B4AD") + 
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Primary ELA Scores Across Time",
+    x = "Primary ELA Score",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("% Did Not Meet", "% Partially Met", "% Approached", "% Met or Exceeded")) +
+  facet_wrap(~ year)
+```
+
+```{r}
+#| label: fig-math
+#| fig-cap: Primary Math Scores Across Time
+
+cps_sorted |> 
+  ggplot(aes(x = factor(primary_math, levels = c("percent_did_not_meet_math", "percent_partially_met_math", "percent_approached_math", "percent_met_or_exceeded_math")))) + 
+  geom_bar(fill = "#B4CCE3") + 
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, position = position_stack(vjust = 0.5)) +
+  labs(
+    title = "Primary Math Scores Across Time",
+    x = "Primary Math Score",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  scale_x_discrete(labels = c("% Did Not Meet", "% Partially Met", "% Approached", "% Met or Exceeded")) +
+  facet_wrap(~ year)
+```
+
+```{r}
+#| label: fig-ela-met
+#| fig-cap: Percentage of Students Meeting ELA Levels Over Years
+
+# ela scores
 ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_exceeded_ela)) +
   geom_bar(stat = "identity", position = "dodge", fill = "#F7B4AD") +
   labs(title = "Percentage of Students Meeting ELA Levels Over Years",
        x = "Year",
-       y = "Average % Met Math Levels") +
+       y = "Average % Met ELA Levels") +
   theme_minimal()
+```
 
-# math
+```{r}
+#| label: fig-math-met
+#| fig-cap: Percentage of Students Meeting Math Levels Over Years
+
+# math scores
 ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_exceeded_math)) +
   geom_bar(stat = "identity", position = "dodge", fill = "#B4CCE3") +
   labs(title = "Percentage of Students Meeting Math Levels Over Years",
        x = "Year",
        y = "Average % Met Math Levels") +
+  theme_minimal()
+```
+
+#### Race
+
+```{r}
+#| label: fig-ela-race
+#| fig-cap: Percentage of Students Meeting ELA Levels By Primary Race of School Over Time
+
+ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
+  geom_point() +
+  geom_line(aes(group = primary_race)) +
+  labs(title = "Percentage of Students Meeting ELA Levels By Primary Race of School Over Time",
+       x = "Year",
+       y = "Average % Met ELA Levels",
+       color = "Primary Race") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
+  theme(legend.position = "bottom")
+```
+
+```{r}
+#| label: fig-math-race
+#| fig-cap: Percentage of Students Meeting Math Levels By Primary Race of School Over Time
+
+ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
+  geom_point() +
+  geom_line(aes(group = primary_race)) +
+  labs(title = "Percentage of Students Meeting Math Levels By Primary Race of School Over Time",
+       x = "Year",
+       y = "Average % Met Math Levels",
+       color = "Primary Race") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
+  theme(legend.position = "bottom")
+```
+
+#### Low-Income
+```{r}
+#| label: fig-low-income
+#| fig-cap: Distribution of Low-Income Students
+
+cps_sorted |> 
+  ggplot(aes(x = percent_low_income)) +
+  geom_histogram(bins = 80, fill = "#E0CBE4") +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Low-Income Students",
+    x = "% Low-Income Students Out of Whole Student Body",
+    y = "Count"
+  )
+```
+
+```{r}
+#| label: fig-title-one
+#| fig-cap: Title 1 Schools By Primary Race
+
+cps_sorted |> 
+  filter(title_one == TRUE) |> 
+  ggplot(aes(x = primary_race, fill = primary_race)) +
+  geom_bar() +
+  labs(
+    title = "Title 1 Schools By Primary Race",
+    x = "Primary Race",
+    y = "Count",
+    fill = "Primary Race"
+  ) +
+  scale_fill_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) +
   theme_minimal()
 ```
 

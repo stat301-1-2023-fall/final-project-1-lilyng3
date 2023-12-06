@@ -41,9 +41,9 @@ cps_sorted <- cps |>
 cps_sorted |> 
   ggplot(aes(x = factor(primary_ela, levels = c("percent_did_not_meet_ela", "percent_partially_met_ela", "percent_approached_ela", "percent_met_or_exceeded_ela")))) + 
   geom_bar(fill = "#F7B4AD") + 
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Distribution of Primary ELA Scores",
+    title = "Primary ELA Scores Across Time",
     x = "Primary ELA Score",
     y = "Count"
   ) +
@@ -58,9 +58,9 @@ cps_sorted |>
 cps_sorted |> 
   ggplot(aes(x = factor(primary_math, levels = c("percent_did_not_meet_math", "percent_partially_met_math", "percent_approached_math", "percent_met_or_exceeded_math")))) + 
   geom_bar(fill = "#B4CCE3") + 
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Distribution of Primary Math Scores",
+    title = "Primary Math Scores Across Time",
     x = "Primary Math Score",
     y = "Count"
   ) +
@@ -86,7 +86,7 @@ ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_exceeded_ela)) +
   geom_bar(stat = "identity", position = "dodge", fill = "#F7B4AD") +
   labs(title = "Percentage of Students Meeting ELA Levels Over Years",
        x = "Year",
-       y = "Average % Met Math Levels") +
+       y = "Average % Met ELA Levels") +
   theme_minimal()
 
 # math scores for only students who met the standards
