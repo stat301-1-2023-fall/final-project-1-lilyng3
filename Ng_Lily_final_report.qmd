@@ -17,6 +17,14 @@ execute:
 
 from: markdown+emoji 
 ---
+```{r}
+# load packages and data
+library(tidyverse)
+library(janitor)
+library(naniar)
+
+cps <- read_rds("data/cps_data.rds")
+```
 
 ::: {.callout-tip icon="false"}
 ## Github Repo Link
@@ -29,15 +37,6 @@ from: markdown+emoji
 ## Data overview & quality
 
 ## Explorations
-
-```{r}
-# load packages and data
-library(tidyverse)
-library(janitor)
-library(naniar)
-
-cps <- read_rds("data/cps_data.rds")
-```
 
 ```{r}
 # data manipulation

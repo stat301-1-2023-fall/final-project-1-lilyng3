@@ -48,6 +48,7 @@ ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_exceeded_ela)) +
        y = "Average % Met Math Levels") +
   theme_minimal()
 
+# math
 ggplot(pandemic_scores, aes(x = as.factor(year), y = avg_met_exceeded_math)) +
   geom_bar(stat = "identity", position = "dodge", fill = "#B4CCE3") +
   labs(title = "Percentage of Students Meeting Math Levels Over Years",
@@ -62,8 +63,6 @@ num_unique_schools <- cps_sorted |>
 # 500 schools
 
 # level of school ----------------------------------------------------------
-# issue is this is across all data points, which is across four years. therefore, it will represent schools multiple times
-
 cps |> 
   mutate(primary_category = factor(primary_category, levels = c("ES", "MS", "HS"))) |> 
   ggplot(aes(x = primary_category)) +
@@ -81,7 +80,6 @@ cps |>
 
 
 # low-income --------------------------------------------------------------
-
 cps_sorted |> 
   ggplot(aes(x = percent_low_income)) +
   geom_histogram(bins = 80, fill = "#E0CBE4") +
@@ -92,6 +90,7 @@ cps_sorted |>
     y = "Count"
   )
 
+# low-income by race
 cps_sorted |> 
   filter(title_one == TRUE) |> 
   ggplot(aes(x = primary_race, fill = primary_race)) +
@@ -122,6 +121,7 @@ cps_sorted |>
 #   scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) +
 #   facet_wrap(~ year)
 
+# line graph
 cps_sorted |> 
   ggplot(aes(x = "", fill = primary_race)) +
   geom_bar(width = 1) +
@@ -161,6 +161,7 @@ cps_sorted |>
 # +
 #   scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) 
 
+# line graph
 cps_sorted |> 
   ggplot(aes(x = factor(primary_ela, levels = c("percent_did_not_meet_ela", "percent_partially_met_ela", "percent_approached_ela", "percent_met_or_exceeded_ela")))) + 
   geom_bar(fill = "#F7B4AD") + 

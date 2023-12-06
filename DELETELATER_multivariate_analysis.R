@@ -5,19 +5,6 @@ library(naniar)
 
 cps <- read_rds("data/cps_data.rds")
 
-# scores by race by year
-cps_sorted |> 
-  group_by(year, primary_race) |> 
-  summarise(count = n()) |> 
-  gt::gt()
-
-pandemic_scores_race <- cps_sorted |> 
-  group_by(year, primary_race) |> 
-  summarise(
-    avg_met_exceeded_ela = mean(percent_met_or_exceeded_ela, na.rm = TRUE),
-    avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE)
-  )
-
 # ela barplot
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -114,7 +101,7 @@ avg_ela <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exc
   scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
   theme(legend.position = "bottom")
 
-# layer the ela data
+# layer average and low-income ela data
 avg_ela + 
   geom_point(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race), shape = 1) +
   geom_line(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_ela, group = primary_race), linetype = "dashed")
@@ -131,12 +118,25 @@ avg_math <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_ex
   scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
   theme(legend.position = "bottom")
 
-# layer the math data
+# layer average and low-income math data
 avg_math + 
   geom_point(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race), shape = 1) +
   geom_line(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_math, group = primary_race), linetype = "dashed")
 
-# unused graphs ------------------------------------------------------------
+# unused graphics ------------------------------------------------------------
+
+# scores by race by year
+cps_sorted |> 
+  group_by(year, primary_race) |> 
+  summarise(count = n()) |> 
+  gt::gt()
+
+pandemic_scores_race <- cps_sorted |> 
+  group_by(year, primary_race) |> 
+  summarise(
+    avg_met_exceeded_ela = mean(percent_met_or_exceeded_ela, na.rm = TRUE),
+    avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE)
+  )
 
 # table with racial demographic data
 # cps |>
