@@ -155,32 +155,6 @@ avg_math +
 #   select(black, hispanic, white, asian, native_american, other_ethnicity, asian_pacific_islander, multiracial, hawaiian_pacific_islander, not_available) |>
 #   DT::datatable()
 
-# racial_count <- cps |>
-#   group_by(school_name) |>
-#   summarize(
-#     avg_black = mean(student_count_black),
-#     avg_hispanic = mean(student_count_hispanic),
-#     avg_white = mean(student_count_white),
-#     avg_asian = mean(student_count_asian),
-#     avg_native_american = mean(student_count_native_american),
-#     avg_other_ethnicity = mean(student_count_other_ethnicity),
-#     avg_asian_pacific_islander = mean(student_count_asian_pacific_islander),
-#     avg_multiracial = mean(student_count_multi),
-#     avg_hawaiian_pacific_islander = mean(student_count_hawaiian_pacific_islander),
-#     avg_not_available = mean(student_count_ethnicity_not_available),
-# 
-#     avg_black_pct = mean((student_count_black/student_count_total) * 100),
-#     avg_hispanic_pct = mean((student_count_hispanic/student_count_total) * 100),
-#     avg_white_pct = mean((student_count_white/student_count_total) * 100),
-#     avg_asian_pct = mean((student_count_asian/student_count_total) * 100),
-#     avg_native_american = mean((student_count_native_american/student_count_total) * 100),
-#     avg_other_ethnicity = mean((student_count_other_ethnicity/student_count_total) * 100),
-#     avg_asian_pacific_islander = mean((student_count_asian_pacific_islander/student_count_total) * 100),
-#     avg_multiracial = mean((student_count_multi/student_count_total) * 100),
-#     avg_hawaiian_pacific_islander = mean((student_count_hawaiian_pacific_islander/student_count_total) * 100),
-#     avg_not_available = mean((student_count_ethnicity_not_available/student_count_total) * 100)
-#   )
-
 # side by side bars, not as good visually as another solution
 # ggplot(cps_race, aes(x = as.factor(year), y = percent_did_not_meet_math, fill = primary_race)) +
 #   geom_bar(stat = "identity", position = "dodge") +
