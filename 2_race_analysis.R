@@ -2,6 +2,7 @@
 library(tidyverse)
 library(janitor)
 library(naniar)
+library(gt)
 
 cps <- read_rds("data/cps_data.rds")
 
@@ -26,9 +27,6 @@ cps <- read_rds("data/cps_data.rds")
 cps_sorted |> 
   ggplot(aes(x = "", fill = primary_race)) +
   geom_bar(width = 1) +
-  geom_text(stat = 'count', 
-            aes(label = ..count..), 
-            position = position_stack(vjust = 0.5)) +
   scale_fill_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) +
   labs(
     title = "Distribution of Primary Race",
@@ -45,6 +43,23 @@ cps_sorted |>
         axis.ticks = element_blank(),
         panel.grid = element_blank())
 
+# scores by race by year (table form)
+cps_sorted |> 
+  group_by(year, primary_race) |>
+  summarise(count = n()) |>
+  group_by(year) |>
+  mutate(percentage = round(count / sum(count) * 100, 1)) |>
+  mutate(primary_race = str_to_title(primary_race)) |>
+  gt() |>
+  tab_header(
+    title = "Primary Race of School by Year",
+  ) |>
+  cols_label(
+    year = "Year",
+    primary_race = "Primary Race",
+    count = "Count",
+    percentage = "Percentage (%)"
+  )
 
 # ela and math by race ----------------------------------------------------
 
@@ -60,7 +75,7 @@ pandemic_scores_race <- cps_sorted |>
 # benefit is seeing each racial group's data on its own
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting ELA Levels By Primary Race of School Over Time",
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race of School by Year",
        x = "Year",
        y = "Average % Met ELA Levels") +
   theme_minimal() +
@@ -74,7 +89,7 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, 
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting ELA Levels By Primary Race of School Over Time",
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race of School by Year",
        x = "Year",
        y = "Average % Met ELA Levels",
        color = "Primary Race") +
@@ -86,7 +101,7 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, 
 # benefit is seeing each racial group's data on its own
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting Math Levels By Primary Race of School Over Time",
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race of School by Year",
        x = "Year",
        y = "Average % Met Math Levels") +
   theme_minimal() +
@@ -100,7 +115,7 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math,
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting Math Levels By Primary Race of School Over Time",
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race of School by Year",
        x = "Year",
        y = "Average % Met Math Levels",
        color = "Primary Race") +
@@ -109,12 +124,6 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math,
   theme(legend.position = "bottom")
 
 # not using -------------------------------------------------------------------
-# tables from progress memo 2, but not useful to my final report narrative
-# scores by race by year
-cps_sorted |> 
-  group_by(year, primary_race) |> 
-  summarise(count = n()) |> 
-  gt::gt()
 
 # find racial counts and percentages at each school
 racial_count <- cps |>

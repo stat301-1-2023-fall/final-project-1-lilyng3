@@ -24,12 +24,13 @@ cps_sorted |>
   ggplot(aes(x = primary_race, fill = primary_race)) +
   geom_bar() +
   labs(
-    title = "Title 1 Schools By Primary Race",
+    title = "Title 1 Schools by Primary Race",
     x = "Primary Race",
     y = "Count",
     fill = "Primary Race"
   ) +
-  scale_fill_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) +
+  scale_fill_brewer(palette = "Set1") +
+  scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) +
   theme_minimal()
 
 # met standards low income -----------------------------------------------------------
@@ -64,7 +65,7 @@ combined_data <-
 ggplot(combined_data,
        aes(x = as.factor(year), y = avg_met_exceeded_ela, fill = group_ela)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting ELA Levels Over Years By Income",
+  labs(title = "Percentage of Students Meeting ELA Levels by Year by Income",
        x = "Year",
        y = "Average % Met ELA Levels") +
   scale_fill_manual(values = c("#F7B4AD", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
@@ -75,10 +76,10 @@ ggplot(combined_data,
 ggplot(combined_data,
        aes(x = as.factor(year), y = avg_met_exceeded_math, fill = group_math)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting Math Levels Over Years By Income",
+  labs(title = "Percentage of Students Meeting Math Levels by Year by Income",
        x = "Year",
        y = "Average % Met Math Levels") +
-  scale_fill_manual(values = c("#F7B4AD", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
+  scale_fill_manual(values = c("#B4CCE3", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
   theme_minimal()
 
 # low-income by race by score ------------------------------------------------------
@@ -96,7 +97,7 @@ pandemic_scores_race_lowincome <- cps_sorted |>
 ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Title 1 Students Meeting ELA Levels by Primary Race of School over Time",
+  labs(title = "Percentage of Title 1 Students Meeting ELA Levels by Primary Race of School by Year",
        x = "Year",
        y = "Average % Met ELA Levels",
        color = "Primary Race") +
@@ -108,7 +109,7 @@ ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exce
 ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Title 1 Students Meeting Math Levels by Primary Race of School over Time",
+  labs(title = "Percentage of Title 1 Students Meeting Math Levels by Primary Race of School by Year",
        x = "Year",
        y = "Average % Met Math Levels",
        color = "Primary Race") +
@@ -121,7 +122,7 @@ ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exce
 avg_ela <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race and Primary Income of School over Time",
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race and Income of School by Year",
        x = "Year",
        y = "Average % Met ELA Levels",
        color = "Primary Race\n(Title 1 = dashed)") +
@@ -138,7 +139,7 @@ avg_ela +
 avg_math <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting Math Levels by Primary Race and Primary Income of School over Time",
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race and Income of School by Year",
        x = "Year",
        y = "Average % Met Math Levels",
        color = "Primary Race\n(Title 1 = dashed)") +

@@ -65,7 +65,7 @@ cps |>
 # side by side bars, not as good visually as another solution
 # ggplot(cps_race, aes(x = as.factor(year), y = percent_did_not_meet_math, fill = primary_race)) +
 #   geom_bar(stat = "identity", position = "dodge") +
-#   labs(title = "Percentage of Students Not Meeting Math Levels Over Years By Race",
+#   labs(title = "Percentage of Students Not Meeting Math Levels Over Years by Race",
 #        x = "Year",
 #        y = "% Did Not Meet Math Levels") +
 #   theme_minimal()
@@ -82,7 +82,7 @@ cps |>
 # ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_ela, color = primary_race)) +
 #   geom_point() +
 #   geom_line(aes(group = primary_race)) +
-#   labs(title = "Percentage of Students Meeting ELA Levels By Race Over Time",
+#   labs(title = "Percentage of Students Meeting ELA Levels by Race Over Time",
 #        x = "Year",
 #        y = "Average % Met ELA Levels",
 #        color = "Primary Race") +
@@ -94,7 +94,7 @@ cps |>
 # ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_math, color = primary_race)) +
 #   geom_point() +
 #   geom_line(aes(group = primary_race)) +
-#   labs(title = "Percentage of Students Meeting Math Levels By Race Over Time",
+#   labs(title = "Percentage of Students Meeting Math Levels by Race Over Time",
 #        x = "Year",
 #        y = "Average % Met Math Levels",
 #        color = "Primary Race") +
