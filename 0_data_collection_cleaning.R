@@ -97,10 +97,10 @@ length(select_if(cps,is.character))
 
 gg_miss_upset(cps)
 
-# Find rows with missing values
+# find rows with missing values
 row_with_missing <- which(apply(cps, 1, function(row) any(is.na(row))))
 
-# Print the row index with missing values
+# print the row index with missing values
 print(row_with_missing)
 
 # codebook ----------------------------------------------------------------

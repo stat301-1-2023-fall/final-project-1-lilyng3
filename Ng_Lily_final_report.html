@@ -3049,12 +3049,12 @@ Github Repo Link
 </div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>This report will explore English Language Arts (ELA) and math data from Chicago Public Schools (CPS). Chicago is the third-largest school district in America, with 341,382 students. As with many metropolitan school systems, they are underfunded and have an inequitable system based on a variety of factors. They also have a testing system to enroll 8th graders in high schools, something that is unique to the district and causes areas for inequity early on in a student’s educational career. Considering the data available skipped the pandemic year (any school year with 2020), I am curious to see if there are any drastic differences in the data pre and post-pandemic. In the education space, there are very valid worries that the pandemic, especially remote learning, exacerbated already existing opportunity gaps for students. I am curious to examine the trends and see if there are gaps in testing scores, and what that could mean for Chicago Public Schools moving forward. I would like to note that while arguments and theories in education should be data-driven, that is only a piece of the picture. Relying on only data as a resource can cause educators to focus on the wrong things, so any claims about the educational system should ideally be holistic to be the most informative and thoughtful. I recognize that this report is just the quantitative data component and more qualitative research should be provided in conjunction for a more robust exploration of how identity and the pandemic affect a student’s performance.</p>
-<p>In this report, I will explore the factors of race, income, and the event of the pandemic to see if they affect the percentage of students who reach benchmark levels for both ELA and math. Historically, examining data through identity-based factors such as race and income displays a difference in scores. This is known in education as ‘the gap’, where we see students of less privileged identities scoring disproportionately lower than their more privileged peers.</p>
+<p>This report will explore English Language Arts (ELA) and math data from Chicago Public Schools (CPS). Chicago is the third-largest school district in America, with 341,382 students. As with many metropolitan school systems, they are underfunded and have an inequitable system based on a variety of factors. They also have a testing system to enroll 8th graders in high schools, something that is unique to the district and causes areas for inequity early on in a student’s educational career. Considering the data available skipped the pandemic year (any school year with 2020), I am curious to see if there are any drastic differences in the data pre and post-pandemic. In the education space, there are very valid worries that the pandemic, especially remote learning, exacerbated already existing opportunity gaps for students. I am curious to examine the trends and see if there are gaps in testing scores, and what that could mean for Chicago Public Schools moving forward. I would like to note that while arguments and theories in education should be data-driven, that is only a piece of the picture. Relying on only data as a resource can cause educators to focus on the wrong things, so any claims about the educational system should ideally be holistic to be the most informative and thoughtful. I recognize that this report is just the quantitative data component and more qualitative research should done in conjunction for a more robust exploration of how identity and the pandemic affect a student’s performance.</p>
+<p>In this report, I will explore the factors of race, income, and the event of the pandemic to see if they affect the percentage of students who reach benchmark levels for both ELA and math. Historically, examining data through identity-based factors such as race and income displays a difference in scores. This difference is known in education as ‘the gap’, where we see students of less privileged identities scoring disproportionately lower than their more privileged peers.</p>
 </section>
 <section id="data-overview-quality" class="level2">
 <h2 class="anchored" data-anchor-id="data-overview-quality">Data Overview &amp; Quality</h2>
-<p>In the dataset, there are 1,954 observations and 31 variables. Each row is a different school in the Chicago Public School system that has reading and math score data for grades 3rd through 8th. Each column is a variable that provides statistics about the schools. There are 28 numeric variables and 3 character variables. The character variables hold the information for the school name in a shorthand code, the full school name, and the type of school it is. The numeric variables hold the information for the total count of students at each school, as well as the count of low-income students, and the count of students by race. CPS groups its students into the following race/ethnicity categories: Black, Asian, Hispanic, Multiracial, Native American/Alaskan Native, Pacific Islander/Hawaiian, White, and Not Available (Census: Race). The numeric variables also contain how many students were tested in both ELA and math, as well as what benchmark category they made. The dataset has the percentages for the benchmarks of ‘did not meet’, ‘partially met’, ‘approached’, ‘met’, ‘exceeded’, and ‘met or exceeded’.</p>
+<p>In the dataset, there are 1,954 observations and 31 variables. Each row is a different school in the Chicago Public School system that has reading and math score data for grades 3rd through 8th. Each column is a variable that provides statistics about the schools. There are 28 numeric variables and 3 character variables. The character variables hold the information for the school name in a shorthand code, the full school name, and the type of school it is. The numeric variables hold the information for the school ID, year, total count of students at each school, as well as the count of low-income students, and the count of students by race. CPS groups its students into the following race/ethnicity categories: Black, Asian, Hispanic, Multiracial, Native American/Alaskan Native, Pacific Islander/Hawaiian, White, and Not Available (Census: Race). The numeric variables also contain how many students were tested in both ELA and math, as well as what benchmark category they made. The dataset has the percentages for the benchmarks of ‘did not meet’, ‘partially met’, ‘approached’, ‘met’, ‘exceeded’, and ‘met or exceeded’. The year is based off of the Spring of the school year, for example ‘2018’ is the school year 2017-2018.</p>
 <p>As for missingness, there is only one observation in the dataset that has missing values. This is a University of Chicago charter school, the Woodlawn campus. They are missing all English Language Arts (ELA) data from 2019. When I manipulated my cleaned dataset to create my graphics, I ended up removing the school from the dataset as I did not want to have partial ELA data for the school. I thought it was best for continuity to remove the school altogether. So without the University of Chicago Woodlawn, there are 500 unique schools in the dataset. As of August 2023, there are 634 schools run by the CPS district, including schools that are 9-12th. Therefore, this dataset is comprehensive to the schools in the district.</p>
 <p>Something to note about the dataset is that for demographics, I did not have the detailed level of the individual student’s identity and the scores tied to them. Therefore, when I talk about race, it is in the form of a ‘primary racial group’. This is whatever racial group holds the highest percentage at each school. Therefore, if a school’s primary racial group is ‘Black’, that could mean the school is 90% Black students, or 51% Black and 49% Hispanic. I feel this clarification is important to keep in mind when assessing trends across identity groups.</p>
 </section>
@@ -3062,7 +3062,7 @@ Github Repo Link
 <h2 class="anchored" data-anchor-id="explorations">Explorations</h2>
 <section id="the-effect-of-the-pandemic" class="level4">
 <h4 class="anchored" data-anchor-id="the-effect-of-the-pandemic">The Effect of the Pandemic</h4>
-<p>Every Spring, Chicago Public School 3rd through 8th graders take exams that assess their English Language Arts and math skills. The goal is to prepare students and keep them on track for college and career readiness. The tests are then scored and students’ tests are placed along a spectrum of benchmarks, being ‘did not meet’, ‘partially met’, ‘approached’, ‘met’, ‘exceeded’, and ‘met or exceeded’. <a href="#fig-ela">Figure 1</a> and <a href="#fig-math">Figure 2</a> below examine the primary ELA and math scores across time, respectively. Primary will be used a lot throughout this report. This connotes the highest percentage value out of the category. For example, if a school’s primary ELA score is ‘did not meet’, it means the largest pool out of all scoring options was ‘did not meet’. The dataset contains two pre-pandemic years (2018 and 2019) and two post-pandemic years (2022 and 2023).</p>
+<p>Every Spring, Chicago Public School 3rd through 8th graders take exams that assess their English Language Arts and math skills. The goal is to prepare students and keep them on track for college and career readiness. The tests are then scored and students’ tests are placed along a spectrum of benchmarks, being ‘did not meet’, ‘partially met’, ‘approached’, ‘met’, ‘exceeded’, and ‘met or exceeded’. <a href="#fig-ela">Figure 1</a> and <a href="#fig-math">Figure 2</a> below examine the primary ELA and math scores across time, respectively. The concept of ‘primary’ will be used a lot throughout this report. This connotes the highest percentage value out of the category. For example, if a school’s primary ELA score is ‘did not meet’, it means the largest pool out of all scoring options was ‘did not meet’. The dataset contains two pre-pandemic years (2018 and 2019) and two post-pandemic years (2022 and 2023).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-ela" class="quarto-figure quarto-figure-center anchored">
@@ -3104,11 +3104,11 @@ Github Repo Link
 </div>
 </div>
 </div>
-<p>This report will focus on meeting standards as the benchmark. I will use standard of ‘met or exceeded’ to represent students who passed the benchmark standards for their grade level, but will communicate this grouping as ‘meeting standards’ for brevity. <a href="#fig-ela-met">Figure 3</a> represents the schools that primarily met ELA standards, and <a href="#fig-math-met">Figure 4</a> represents the schools that primarily met math standards. This is represented by the percentage of schools that primarily met standards each year. Through these graphs, we can see again that the pandemic lowered the amount of students who were meeting standards. One more trend that can be observed is that two years after 2020, which is regarded as the peak year of the pandemic that affected schooling, scores began to improve in both ELA and math. This means that being back in the regular routine of school was beneficial to student’s learning, and could continue to be beneficial as time progresses.</p>
+<p>This report will focus on meeting standards as the benchmark. I will use standard of meeting or exceeding the goal benchmark to represent students who all met the standards for their grade level, but will communicate this grouping as ‘meeting standards’ for brevity. <a href="#fig-ela-met">Figure 3</a> represents the schools that primarily met ELA standards, and <a href="#fig-math-met">Figure 4</a> represents the schools that primarily met math standards. This is represented by the percentage of schools that primarily met standards each year. Through these graphs, we can see again that the pandemic lowered the amount of students who were meeting standards. One more trend that can be observed is that two years after 2020, which is regarded as the peak year of the pandemic that affected schooling, scores began to improve in both ELA and math. This means that being back in the regular routine of school was beneficial to student’s learning, and could continue to be beneficial as time progresses.</p>
 </section>
 <section id="in-the-context-of-race" class="level4">
 <h4 class="anchored" data-anchor-id="in-the-context-of-race">In the Context of Race</h4>
-<p>Next, I will look at the distribution of primary racial groups in each school. <a href="#fig-race">Figure 5</a> provides a pie chart of the primary racial groups, for more context the categorization of primary race is explained in the data overview section.</p>
+<p>Next, I will look at the distribution of primary racial groups in each school. <a href="#fig-race">Figure 5</a> provides a pie chart of the primary racial groups, for more context on the categorization of primary race, see the explanation in the data overview section.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-race" class="quarto-figure quarto-figure-center anchored">
@@ -3123,20 +3123,20 @@ Github Repo Link
 <div id="fig-race-table" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 
-<div id="gmfnefkyrq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gmfnefkyrq table {
+<div id="afzitystjn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#afzitystjn table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#gmfnefkyrq thead, #gmfnefkyrq tbody, #gmfnefkyrq tfoot, #gmfnefkyrq tr, #gmfnefkyrq td, #gmfnefkyrq th {
+#afzitystjn thead, #afzitystjn tbody, #afzitystjn tfoot, #afzitystjn tr, #afzitystjn td, #afzitystjn th {
 border-style: none;
 }
-#gmfnefkyrq p {
+#afzitystjn p {
 margin: 0;
 padding: 0;
 }
-#gmfnefkyrq .gt_table {
+#afzitystjn .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -3161,11 +3161,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_caption {
+#afzitystjn .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#gmfnefkyrq .gt_title {
+#afzitystjn .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -3176,7 +3176,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#gmfnefkyrq .gt_subtitle {
+#afzitystjn .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3187,7 +3187,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#gmfnefkyrq .gt_heading {
+#afzitystjn .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -3198,12 +3198,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_bottom_border {
+#afzitystjn .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_col_headings {
+#afzitystjn .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3217,7 +3217,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_col_heading {
+#afzitystjn .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3236,7 +3236,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#gmfnefkyrq .gt_column_spanner_outer {
+#afzitystjn .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3247,13 +3247,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#gmfnefkyrq .gt_column_spanner_outer:first-child {
+#afzitystjn .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#gmfnefkyrq .gt_column_spanner_outer:last-child {
+#afzitystjn .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#gmfnefkyrq .gt_column_spanner {
+#afzitystjn .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3264,10 +3264,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#gmfnefkyrq .gt_spanner_row {
+#afzitystjn .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#gmfnefkyrq .gt_group_heading {
+#afzitystjn .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3292,7 +3292,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#gmfnefkyrq .gt_empty_group_heading {
+#afzitystjn .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3306,13 +3306,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#gmfnefkyrq .gt_from_md > :first-child {
+#afzitystjn .gt_from_md > :first-child {
 margin-top: 0;
 }
-#gmfnefkyrq .gt_from_md > :last-child {
+#afzitystjn .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#gmfnefkyrq .gt_row {
+#afzitystjn .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3330,7 +3330,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#gmfnefkyrq .gt_stub {
+#afzitystjn .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3342,7 +3342,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gmfnefkyrq .gt_stub_row_group {
+#afzitystjn .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3355,13 +3355,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#gmfnefkyrq .gt_row_group_first td {
+#afzitystjn .gt_row_group_first td {
 border-top-width: 2px;
 }
-#gmfnefkyrq .gt_row_group_first th {
+#afzitystjn .gt_row_group_first th {
 border-top-width: 2px;
 }
-#gmfnefkyrq .gt_summary_row {
+#afzitystjn .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3370,14 +3370,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gmfnefkyrq .gt_first_summary_row {
+#afzitystjn .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_first_summary_row.thick {
+#afzitystjn .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#gmfnefkyrq .gt_last_summary_row {
+#afzitystjn .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3386,7 +3386,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_grand_summary_row {
+#afzitystjn .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3395,7 +3395,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gmfnefkyrq .gt_first_grand_summary_row {
+#afzitystjn .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3404,7 +3404,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_last_grand_summary_row_top {
+#afzitystjn .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3413,10 +3413,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_striped {
+#afzitystjn .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#gmfnefkyrq .gt_table_body {
+#afzitystjn .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3424,7 +3424,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_footnotes {
+#afzitystjn .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3437,7 +3437,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_footnote {
+#afzitystjn .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3445,7 +3445,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gmfnefkyrq .gt_sourcenotes {
+#afzitystjn .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3458,57 +3458,57 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#gmfnefkyrq .gt_sourcenote {
+#afzitystjn .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gmfnefkyrq .gt_left {
+#afzitystjn .gt_left {
 text-align: left;
 }
-#gmfnefkyrq .gt_center {
+#afzitystjn .gt_center {
 text-align: center;
 }
-#gmfnefkyrq .gt_right {
+#afzitystjn .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#gmfnefkyrq .gt_font_normal {
+#afzitystjn .gt_font_normal {
 font-weight: normal;
 }
-#gmfnefkyrq .gt_font_bold {
+#afzitystjn .gt_font_bold {
 font-weight: bold;
 }
-#gmfnefkyrq .gt_font_italic {
+#afzitystjn .gt_font_italic {
 font-style: italic;
 }
-#gmfnefkyrq .gt_super {
+#afzitystjn .gt_super {
 font-size: 65%;
 }
-#gmfnefkyrq .gt_footnote_marks {
+#afzitystjn .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#gmfnefkyrq .gt_asterisk {
+#afzitystjn .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#gmfnefkyrq .gt_indent_1 {
+#afzitystjn .gt_indent_1 {
 text-indent: 5px;
 }
-#gmfnefkyrq .gt_indent_2 {
+#afzitystjn .gt_indent_2 {
 text-indent: 10px;
 }
-#gmfnefkyrq .gt_indent_3 {
+#afzitystjn .gt_indent_3 {
 text-indent: 15px;
 }
-#gmfnefkyrq .gt_indent_4 {
+#afzitystjn .gt_indent_4 {
 text-indent: 20px;
 }
-#gmfnefkyrq .gt_indent_5 {
+#afzitystjn .gt_indent_5 {
 text-indent: 25px;
 }
 </style>
@@ -3594,8 +3594,8 @@ text-indent: 25px;
 </figure>
 </div>
 </div>
-<p>We can see that the number of schools each year decreases slightly seen by the white sliver in the pie charts for years past 2018. Additionally, most schools are primarily Black or Hispanic, and the table (<a href="#fig-race-table">Figure 6</a>) expands on this, where we can see that around 90% of schools each year are primarily Black or Hispanic. This provides a lot of context as we analyze ELA and math scores by race, knowing that there is a much larger data pool for some primary racial groups than others.</p>
-<p>Exploring the factor of race in relation to ELA and math scores, <a href="#fig-ela-race">Figure 7</a> (ELA) and <a href="#fig-math-race">Figure 8</a> (math) explore scores by primary race. These figures are created similarly to the two graphs above that focus on meeting standards, meaning that it takes the percent average from the primary group of meeting or exceeding standards, grouped by race. This allows for a more nuanced look at the data, as the general trends seen above may have varying applications to students based on identity factors.</p>
+<p>We can see that the number of schools in the dataset each year decreases slightly as seen by the white sliver in the pie charts for years past 2018. Additionally, most schools are primarily Black or Hispanic, and the table (<a href="#fig-race-table">Figure 6</a>) expands on this, where we can see that around 90% of schools each year are primarily Black or Hispanic. This provides context as we analyze ELA and math scores by race, knowing that there is a much larger data pool for some primary racial groups than others.</p>
+<p>Exploring the factor of race in relation to ELA and math scores, <a href="#fig-ela-race">Figure 7</a> (ELA) and <a href="#fig-math-race">Figure 8</a> (math) explore scores by primary race. These figures are created similarly to the two graphs above that focus on meeting standards, meaning that it takes the percent average from the primary group of meeting or exceeding standards, grouped by race. This allows for a more nuanced look at the data, as the general trends seen above may have varying applications to students based on racial identity factors.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-ela-race" class="quarto-figure quarto-figure-center anchored">
@@ -3616,7 +3616,7 @@ text-indent: 25px;
 </div>
 </div>
 </div>
-<p>After separating the data by race, for ELA testing in <a href="#fig-ela-race">Figure 7</a>, we can see that primarily Asian and White schools meet benchmarks proportionally higher across time as compared to primarily Black and Hispanic schools. Additionally, primarily Asian schools were the only set of schools that saw consistent improvement in meeting ELA scores over time. For math, in <a href="#fig-math-race">Figure 8</a>, we can see the same pattern of primarily Asian and White schools meeting standards more than primarily Black and Hispanic schools. We can also see a similar trend of minor improvement two years after the pandemic for both ELA and math. Here, we can see the predicted ‘gap’ appearing within the data, with Black and Hispanic students meeting benchmarks less than their Asian and White peers.</p>
+<p>After separating the data by race, for ELA testing in <a href="#fig-ela-race">Figure 7</a>, we can see that primarily Asian and White schools meet benchmarks proportionally higher across time as compared to primarily Black and Hispanic schools. Additionally, primarily Asian schools were the only set of schools that saw consistent improvement in meeting ELA scores over time. The reason for this is unclear, and perhaps with more primarily Asian schools, the trend would change. For math, in <a href="#fig-math-race">Figure 8</a>, we can see the same pattern of primarily Asian and White schools meeting standards more than primarily Black and Hispanic schools. We can also see a similar trend of minor improvement two years after the pandemic for both ELA and math. Here, we can see the predicted ‘gap’ appearing within the data, with Black and Hispanic students meeting benchmarks less than their Asian and White peers.</p>
 </section>
 <section id="in-the-context-of-income" class="level4">
 <h4 class="anchored" data-anchor-id="in-the-context-of-income">In the Context of Income</h4>
@@ -3655,7 +3655,7 @@ text-indent: 25px;
 </div>
 </div>
 <p>In <a href="#fig-combined-ela">Figure 10</a>, we can see that Title I schools consistently meet the benchmarks for ELA less than the average. The same trend is seen with math scores, in <a href="#fig-combined-math">Figure 11</a>. These graphs relay that lower-income, Title I schools are meeting benchmarks less than the average. This is on trend with the general idea that being lower income can be tied to less opportunity due to less privilege. Again, we see a slight improvement two years post-pandemic.</p>
-<p><a href="#fig-title-one">Figure 12</a> provides the primary racial breakdown of the Title I schools. It should be noted that each school is represented at most four times in the dataset, contributing to the high count for each bar.</p>
+<p><a href="#fig-title-one">Figure 12</a> provides the primary racial breakdown of the Title I schools. It should be noted that each school is represented at most four times in the dataset, contributing to the high count for each bar. For more on this, see the <em>Appendix: Technical Information</em>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-title-one" class="quarto-figure quarto-figure-center anchored">
@@ -3666,7 +3666,7 @@ text-indent: 25px;
 </div>
 </div>
 </div>
-<p>This graph shows that in the dataset, primarily Black and Hispanic schools qualify as Title I as compared to primarily Asian and White schools, which is not surprising due to the intersectionality of racial identity and income levels, with Black and Hispanic families having historically less capital due to social factors than Asian and White families.</p>
+<p>This graph shows that in the dataset, primarily Black and Hispanic schools qualify as Title I as compared to primarily Asian and White schools, which is not surprising due to the intersectionality of racial identity and income levels, with Black and Hispanic families having historically less capital due to social factors as compared to Asian and White families.</p>
 <p>Finally, I want to explore race and income in relation to meeting benchmark standards. So far, we have found that primarily Black schools meet benchmarks less than their counterparts, with primarily Hispanic schools meeting benchmarks at around the same levels. We have also found that lower-income schools meet benchmarks less than the average. We know that more primarily Black and Hispanic schools are Title I as well. Therefore, considering all those factors, Black students at Title I schools should meet benchmark standards the least as compared to all other groups, subdivided by race and income.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -3688,14 +3688,14 @@ text-indent: 25px;
 </div>
 </div>
 </div>
-<p>To test this hypothesis, <a href="#fig-combined-race-ela">Figure 13</a> looks at ELA scores and <a href="#fig-combined-race-math">Figure 14</a> looks at math scores. Though all data points for both ELA and math follow relatively similar proportions between the average data and the Title I data, we can see that the proportions of Title I schools by primary race are lower than the average. Furthermore, primarily Black Title I schools are meeting standards the least for both ELA and math metrics, as predicted. Another observation to note is that the drop between the average and Title I schools meeting the benchmark is a lot less for primarily Black and Hispanic schools. This is likely because there is a high overlap between Black and Hispanic schools being Title I.</p>
+<p>To test this hypothesis, <a href="#fig-combined-race-ela">Figure 13</a> looks at ELA scores and <a href="#fig-combined-race-math">Figure 14</a> looks at math scores. Though all data points for both ELA and math follow relatively similar proportions between the average data and the Title I data, we can see that the proportions of Title I schools by primary race are lower than the average. Furthermore, primarily Black Title I schools are meeting standards the least for both ELA and math metrics, as predicted. Another observation to note is that the drop between the average schools meeting the benchmark and Title I schools meeting the benchmark is a lot less for primarily Black and Hispanic schools. This is could be because there is a high overlap between Black and Hispanic schools being Title I.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Based on the data, it is evident that both race and income level are affecting factors in meeting benchmarks for both English Language Arts and math testing. It is important to clarify that this statement does not mean race or income level is the direct reason for the scores, more that the social factors, including access to opportunity, stigmas, etc can correlate with lower scores. For example, low-income Black students in Chicago are less likely to have access to expensive tutoring than their upper-class White peers. Through exploring the data, I found that Black and Hispanic students met benchmarks less frequently than their Asian and Black counterparts, and Title I schools of all primary races met benchmarks less than the average. Therefore, because of opportunities, White students may score higher than their Black peers. Considering the knowledge base we have on Black and Brown (Hispanic) as well as low-income identities being the least privileged, therefore potentially facing higher barriers to their learning, these findings were not surprising.</p>
-<p>Additionally, we can see that post-pandemic, fewer students met benchmarks as compared to pre-pandemic, therefore the pandemic had a negative impact on student learning. Considering that public schools across America scrambled to transfer their learning to a remote format, this trend is not surprising. There was not a set system for remote learning, and educators struggled to transfer the same techniques from in-school learning to the online format. This is not to say that remote learning is a worse format, more that schools and students were not prepared for the transition or the pandemic, which may have compromised the quality of the education. However, two years post-pandemic, the percentage of students meeting benchmarks began to rise again. This is hopeful, as perhaps more time being back in the regular routine of school can make up for the drop in number of students meeting standards seen post-pandemic. Ideally, I would like to have data for the missing pandemic years (2019-2020 and 2020-2021) to see what the benchmarks looked like, as well as explore the social profiles of each student to see what factors influenced a greater drop in meeting benchmarks for some and not others. Unfortunately, that data was either not collected or not publicly available. I would also like to add data going into the future, to see if the amount of students meeting benchmarks increases or not.</p>
-<p>In the future, I would like to have the data by student, as opposed to by school. This would make the trends more applicable to identity, as opposed to using the ‘primary’ logic I had to apply due to the nature of the data. I would be curious to see how closely the results I found in this report track with the results from the data by student. Additionally, I would like to explore if different school types, such as private and charter schools, affect students’ ability to reach benchmarks, considering that there is a lot of argument in the educational community as to which ‘type’ of school is the most beneficial to students.</p>
+<p>Based on the data, it is evident that both race and income level are affecting factors in meeting benchmarks for both English Language Arts and math testing. It is important to clarify that this statement does not mean race or income level is the direct reason for the scores, more that the social factors, including access to opportunity, stigmas, etc, can correlate with lower scores. For example, low-income Black students in Chicago are less likely to have access to expensive tutoring that could improve learning as compared to their upper-class White peers. Therefore, because of opportunities, White students may score higher than their Black peers. Through exploring the data, I found that Black and Hispanic students met benchmarks less frequently than their Asian and Black counterparts, and Title I schools of all primary races met benchmarks less than the average. Considering the knowledge base we have on Black and Brown (Hispanic) as well as low-income identities being the least privileged, therefore potentially facing higher barriers to their learning, these findings were not surprising.</p>
+<p>Additionally, we can see that post-pandemic, fewer students met benchmarks as compared to pre-pandemic, therefore the pandemic had a negative impact on student learning. Considering that public schools across America scrambled to transfer their learning to a remote format, this trend is not surprising. There was not a set system for remote learning, and educators struggled to transfer the same techniques from in-school learning to the online format. This is not to say that remote learning is a worse format, more that schools and students were not prepared for the transition or the pandemic, which may have compromised the quality of the education. However, two years post-pandemic, the percentage of students meeting benchmarks began to rise again. This is hopeful, as perhaps more time being back in the regular routine of school can make up for the drop in number of students meeting standards seen post-pandemic. Ideally, I would like to have data for the missing pandemic years (2019-2020 and 2020-2021) to see what the benchmarks looked like, as well as explore the social profiles of each student to see what factors influenced a greater drop in meeting benchmarks for some and not others. Unfortunately, that data was either not collected or not publicly available. I would also like to add data going into the future, to see if the amount of students meeting benchmarks increases or not as we move away from the peak effects of the pandemic.</p>
+<p>In the future, I would also like to have the data by student, as opposed to by school. This would make the trends more applicable to identity, as opposed to using the ‘primary’ logic I had to apply due to the nature of the data. I would be curious to see how closely the results I found in this report track with the results from the data by student. Additionally, I would like to explore if different school types, such as private and charter schools, affect students’ ability to reach benchmarks, considering that there is a lot of argument in the educational community as to which ‘type’ of school is the most beneficial to students.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
@@ -3712,7 +3712,7 @@ text-indent: 25px;
 <p>This dataset was created by joining multiple years of data together and adding ELA and math scores to identity-based data. The sources of the dataset are referenced above.</p>
 <p>It was mentioned in the data overview that there are variables for the racial groupings of Black, Asian, Hispanic, Multiracial, Native American/Alaskan Native, Pacific Islander/Hawaiian, White, and Not Available (Census: Race). However, in this report, only Asian, Black, Hispanic, and White are examined. This is due to the structure of the analysis examining the primary racial group at each school, and no schools had primarily racial groups of the other categorizations. I chose not to add the Hawaiian and Pacific Islander categories to the ‘Asian’ group due to discourse around whether or not to add all those groups to the umbrella of ‘Asian’, and whether that causes erasure of the differing Hawaiian and Pacific Islander identities.</p>
 <p>In <a href="#fig-title-one">Figure 12</a>, I mentioned that each school may be represented in the graph up to four times, seeing that there are four years in the dataset. The reason why I chose not to pare the data down to one representation per school is because the school demographics shift by year. Therefore, I cannot categorize a school as one singular primary race if it shifts over time. I could have faceted the graph, but I did not feel that looking at the data by year would be useful to the report. The graph is still representative of the relationship between qualifying as a Title I school and race, it is just not specified to one data point per school.</p>
-<p>In the variable that determines the level of school, there are high schools, middle schools, and elementary schools. While this data only looks at scores from 3rd to 8th grade, some high schools serve grades 7th to 12th. Therefore, that is why there are high schools included in the dataset. For further information on the levels of schools in the dataset, see <em>extra explorations</em>.</p>
+<p>In the variable that determines the level of school, there are high schools, middle schools, and elementary schools. While this data only looks at scores from 3rd to 8th grade, some high schools serve grades 7th to 12th. Therefore, that is why there are high schools included in the dataset. For further information on the levels of schools in the dataset, see <em>Appendix: Extra Explorations</em>.</p>
 </section>
 <section id="appendix-extra-explorations" class="level2">
 <h2 class="anchored" data-anchor-id="appendix-extra-explorations">Appendix: Extra Explorations</h2>
