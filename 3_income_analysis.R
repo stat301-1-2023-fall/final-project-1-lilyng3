@@ -65,7 +65,7 @@ combined_data <-
 ggplot(combined_data,
        aes(x = as.factor(year), y = avg_met_exceeded_ela, fill = group_ela)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting ELA Levels by Year by Income",
+  labs(title = "Percentage of Students Meeting ELA Levels by Income",
        x = "Year",
        y = "Average % Met ELA Levels") +
   scale_fill_manual(values = c("#F7B4AD", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
@@ -76,7 +76,7 @@ ggplot(combined_data,
 ggplot(combined_data,
        aes(x = as.factor(year), y = avg_met_exceeded_math, fill = group_math)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting Math Levels by Year by Income",
+  labs(title = "Percentage of Students Meeting Math Levels by Income",
        x = "Year",
        y = "Average % Met Math Levels") +
   scale_fill_manual(values = c("#B4CCE3", "#E0CBE4"), name = "Group", labels = c("Average", "Title 1")) +
@@ -96,20 +96,20 @@ pandemic_scores_race_lowincome <- cps_sorted |>
 # low-income ela line graph
 ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
   geom_point() +
-  geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Title 1 Students Meeting ELA Levels by Primary Race of School by Year",
+  geom_line(aes(group = primary_race), linetype = "dashed") +
+  labs(title = "Percentage of Title 1 Students Meeting ELA Levels by Primary Race of School",
        x = "Year",
        y = "Average % Met ELA Levels",
        color = "Primary Race") +
   theme_minimal() +
   scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") 
 
 # low-income math line graph
 ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
   geom_point() +
-  geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Title 1 Students Meeting Math Levels by Primary Race of School by Year",
+  geom_line(aes(group = primary_race), linetype = "dashed") +
+  labs(title = "Percentage of Title 1 Students Meeting Math Levels by Primary Race of School",
        x = "Year",
        y = "Average % Met Math Levels",
        color = "Primary Race") +
@@ -122,7 +122,7 @@ ggplot(pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exce
 avg_ela <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race and Income of School by Year",
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race and Income of School",
        x = "Year",
        y = "Average % Met ELA Levels",
        color = "Primary Race\n(Title 1 = dashed)") +
@@ -139,7 +139,7 @@ avg_ela +
 avg_math <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting Math Levels by Primary Race and Income of School by Year",
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race and Income of School",
        x = "Year",
        y = "Average % Met Math Levels",
        color = "Primary Race\n(Title 1 = dashed)") +

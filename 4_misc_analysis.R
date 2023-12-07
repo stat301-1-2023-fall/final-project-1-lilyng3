@@ -19,7 +19,7 @@ cps |>
   geom_bar(fill = "#CCEBC5") + 
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, position = position_stack(vjust = 0.5)) +
   labs(
-    title = "Distribution of Levels of Schools",
+    title = "Distribution of Levels of School",
     x = "School Level",
     y = "Count"
   ) +

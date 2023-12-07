@@ -52,7 +52,7 @@ cps_sorted |>
   mutate(primary_race = str_to_title(primary_race)) |>
   gt() |>
   tab_header(
-    title = "Primary Race of School by Year",
+    title = "Primary Race of School",
   ) |>
   cols_label(
     year = "Year",
@@ -75,7 +75,7 @@ pandemic_scores_race <- cps_sorted |>
 # benefit is seeing each racial group's data on its own
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race of School by Year",
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race of School",
        x = "Year",
        y = "Average % Met ELA Levels") +
   theme_minimal() +
@@ -89,7 +89,7 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, 
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race of School by Year",
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race of School",
        x = "Year",
        y = "Average % Met ELA Levels",
        color = "Primary Race") +
@@ -101,7 +101,7 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, 
 # benefit is seeing each racial group's data on its own
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, fill = primary_race)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Percentage of Students Meeting Math Levels by Primary Race of School by Year",
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race of School",
        x = "Year",
        y = "Average % Met Math Levels") +
   theme_minimal() +
@@ -115,7 +115,7 @@ ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math,
 ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
   geom_point() +
   geom_line(aes(group = primary_race)) +
-  labs(title = "Percentage of Students Meeting Math Levels by Primary Race of School by Year",
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race of School",
        x = "Year",
        y = "Average % Met Math Levels",
        color = "Primary Race") +
