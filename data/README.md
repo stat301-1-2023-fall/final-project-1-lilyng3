@@ -1,10 +1,10 @@
 ## Data
 
-This repository is for the cleaned dataset, as well as the raw files.
+This repository is for the cleaned dataset, as well as the raw files. 
 
 - `raw/`: contains three kinds of datasets. The first is the 'School Profile Information', which contains information about the school's demographic makeup. The second is the 'School Progress Report' which contains testing data from each school. This second type was used in Progress Memo 1, but not moving forward after that in Memo 2 or the Final Report. Finally, there is the `iar-parcc_2015to2023_schoollevel` dataset, which contains up to date testing scores.
 
-- `cps_data.rds`: the joined and cleaned dataset from the raw data. This contains the school, demographic information, and test scores across four school years.
+- `cps_data`: the joined and cleaned dataset from the raw data. This contains the school, demographic information, and test scores across four school years. There are two file versions, a `.rds` and a `.csv`.
 
 ## Citations
 
