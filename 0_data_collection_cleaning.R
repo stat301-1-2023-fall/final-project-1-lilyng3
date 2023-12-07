@@ -89,6 +89,7 @@ cps_data <- inner_join(sy_clean, scores, by = c("school_id", "school_name", "yea
 
 # save cleaned data -------------------------------------------------------
 write_rds(cps_data, file = "data/cps_data.rds")
+write_csv(cps_data, file = "data/cps_data.csv")
 
 # data overview and quality -----------------------------------------------
 length(select_if(cps,is.numeric))
