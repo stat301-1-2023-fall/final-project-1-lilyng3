@@ -1,0 +1,32 @@
+variable,description
+school_id,unique identifier for each school
+school_name,shorthand name of school
+year,year
+long_name,full name of school
+primary_category,"level of school (elementary, middle, or high)"
+student_count_total,number of students
+student_count_low_income,number of low income schools
+student_count_black,number of Black students
+student_count_hispanic,number of Hispanic students
+student_count_white,number of White students
+student_count_asian,number of Asian students
+student_count_native_american,number of Native American students
+student_count_other_ethnicity,number of other ethnicity students
+student_count_asian_pacific_islander,number of Asian Pacific Islander students
+student_count_multi,number of students with multiple racial or ethnic categorizations
+student_count_hawaiian_pacific_islander,number of Hawaiian Pacific Islander students
+student_count_ethnicity_not_available,number of students with no ethnicity available
+number_students_tested_ela,number of students tested for ELA
+percent_did_not_meet_ela,percent of students that did not meet ELA standards
+percent_partially_met_ela,percent of students that partially met ELA standards
+percent_approached_ela,percent of students that approached ELA standards
+percent_met_ela,percent of students that met ELA standards
+percent_exceeded_ela,percent of students that exceeded ELA standards
+percent_met_or_exceeded_ela,percent of students that met or exceeded ELA standards
+number_students_tested_math,number of students tested for math
+percent_did_not_meet_math,percent of students that did not meet math standards
+percent_partially_met_math,percent of students that partially met math standards
+percent_approached_math,percent of students that approached math standards
+percent_met_math,percent of students that met math standards
+percent_exceeded_math,percent of students that exceeded math standards
+percent_met_or_exceeded_math,percent of students that met or exceeded math standards
