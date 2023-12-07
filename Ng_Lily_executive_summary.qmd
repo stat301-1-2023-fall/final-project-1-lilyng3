@@ -1,0 +1,146 @@
+---
+title: "Executive Summary\n\nThe Gap: The Effect of Race, Income, and The Pandemic on Chicago Public School's Learning"
+subtitle: |
+  | Final Project 
+  | Data Science 1 with R (STAT 301-1)
+author: "Lily Ng"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+
+from: markdown+emoji 
+---
+
+```{r}
+# load packages and data
+library(tidyverse)
+library(janitor)
+library(naniar)
+library(gt)
+
+cps <- read_rds("data/cps_data.rds")
+```
+
+::: {.callout-tip icon="false"}
+## Github Repo Link
+
+[Final Project Github Repo](https://github.com/stat301-1-2023-fall/final-project-1-lilyng3)
+:::
+
+## Introduction
+This report will explore English Language Arts (ELA) and math data from Chicago Public Schools (CPS). Chicago is the third-largest school district in America, with 341,382 students. As with many metropolitan school systems, they are underfunded and have an inequitable system based on a variety of factors. I am curious to examine the trends and see if there are gaps in testing scores, and what that could mean for Chicago Public Schools moving forward. I would like to note that while arguments and theories in education should be data-driven, that is only a piece of the picture. I recognize that this report is just the quantitative data component and more qualitative research should be provided in conjunction for a more robust exploration of how identity and the pandemic affect a student's performance.
+
+In the report, I explored the factors of race, income, and the event of the pandemic to see if they affected the percentage of students who reach benchmark levels for both ELA and math. Historically, examining data through identity-based factors such as race and income displays a difference in scores. This is known in education as 'the gap', where we see students of less privileged identities scoring disproportionately lower than their more privileged peers.
+
+## Data Overview
+In the dataset, there are 1,954 observations and 31 variables. Each row is a different school in the Chicago Public School system that has reading and math score data for grades 3rd through 8th. Each column is a variable that provides statistics about the schools. There are 28 numeric variables and 3 character variables. The character variables hold the information for the school name in a shorthand code, the full school name, and the type of school it is. The numeric variables hold the information for the total count of students at each school, as well as the count of low-income students, and the count of students by race. The numeric variables also contain how many students were tested in both ELA and math, as well as what benchmark category they made. 
+
+## Key Findings
+```{r}
+# data manipulation
+racial_groups <- c("student_count_black", "student_count_hispanic", "student_count_white", "student_count_asian", "student_count_native_american", "student_count_other_ethnicity","student_count_asian_pacific_islander", "student_count_multi", "student_count_hawaiian_pacific_islander", "student_count_ethnicity_not_available")
+
+ela_score <- c("percent_did_not_meet_ela", "percent_partially_met_ela", "percent_approached_ela", "percent_met_ela", "percent_exceeded_ela", "percent_met_or_exceeded_ela")
+
+math_score <- c("percent_did_not_meet_math", "percent_partially_met_math", "percent_approached_math", "percent_met_math", "percent_exceeded_math", "percent_met_or_exceeded_math")
+
+cps_sorted <- cps |> 
+  mutate(
+    primary_race = apply(cps[, racial_groups], 1, function(row) {
+      names(row)[which.max(row)]}),
+    primary_ela = names(cps[, ela_score])[max.col(cps[, ela_score], "last")],
+    primary_math = names(cps[, math_score])[max.col(cps[, math_score], "last")]
+  ) |> 
+  mutate(primary_race = sub("student_count_", "", primary_race),
+         percent_low_income = round((student_count_low_income / student_count_total) * 100, 1),
+         title_one = percent_low_income >= 40) |>
+  filter(school_name != "U OF C - WOODLAWN HS") |> 
+  mutate(
+    primary_race = factor(primary_race),
+    primary_ela = factor(primary_ela),
+    primary_math = factor(primary_math)
+  )
+
+# by race
+pandemic_scores_race <- cps_sorted |> 
+  group_by(year, primary_race) |> 
+  summarise(
+    avg_met_exceeded_ela = mean(percent_met_or_exceeded_ela, na.rm = TRUE),
+    avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE)
+  )
+
+pandemic_scores_race_lowincome <- cps_sorted |>
+  filter(title_one == TRUE) |>
+  group_by(year, primary_race) |>
+  summarise(
+    avg_met_exceeded_ela = mean(percent_met_or_exceeded_ela, na.rm = TRUE),
+    avg_met_exceeded_math = mean(percent_met_or_exceeded_math, na.rm = TRUE)
+  )
+```
+
+Throughout the report, I looked at the ways the pandemic, race, and income affected the amount of students meeting benchmark standards. Thus far, I had found that primarily Black schools meet benchmarks less than their counterparts, with primarily Hispanic schools meeting benchmarks at around the same levels. I had also found that lower-income schools meet benchmarks less than the average. I found that more primarily Black and Hispanic schools are Title I as well. Therefore, considering all these factors, I assumed that Black students at Title I schools would meet benchmarks the least as compared to all other groups, subdivided by race and income. 
+
+```{r}
+#| label: fig-combined-race-ela
+#| fig-cap: Percentage of Students Meeting ELA Levels by Primary Race and Income of School
+
+avg_ela <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race)) +
+  geom_point() +
+  geom_line(aes(group = primary_race)) +
+  labs(title = "Percentage of Students Meeting ELA Levels by Primary Race and Income of School",
+       x = "Year",
+       y = "Average % Met ELA Levels",
+       color = "Primary Race\n(Title I = dashed)") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
+  theme(legend.position = "bottom", plot.title = element_text(size = 12))
+
+avg_ela + 
+  geom_point(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_ela, color = primary_race), shape = 1) +
+  geom_line(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_ela, group = primary_race), linetype = "dashed")
+```
+
+```{r}
+#| label: fig-combined-race-math
+#| fig-cap: Percentage of Students Meeting Math Levels by Primary Race and Income of School
+
+avg_math <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race)) +
+  geom_point() +
+  geom_line(aes(group = primary_race)) +
+  labs(title = "Percentage of Students Meeting Math Levels by Primary Race and Income of School",
+       x = "Year",
+       y = "Average % Met Math Levels",
+       color = "Primary Race\n(Title I = dashed)") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
+  theme(legend.position = "bottom", plot.title = element_text(size = 12))
+
+avg_math + 
+  geom_point(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_math, color = primary_race), shape = 1) +
+  geom_line(data = pandemic_scores_race_lowincome, aes(x = as.factor(year), y = avg_met_exceeded_math, group = primary_race), linetype = "dashed")
+```
+
+To test this hypothesis, @fig-combined-race-ela looks at ELA scores and @fig-combined-race-math looks at math scores. Though all data points for both ELA and math follow relatively similar proportions between the average data and the Title I data, we can see that the proportions of Title I schools by primary race are lower than the average. Furthermore, primarily Black Title I schools are meeting standards the least for both ELA and math metrics, as predicted. Another observation to note is that the drop between the average and Title I schools meeting the benchmark is a lot less for primarily Black and Hispanic schools. This is likely because there is a high overlap between Black and Hispanic schools being Title I.
+
+## Conclusion
+Based on my explorations, I found that both race and income level are affecting factors in meeting benchmarks for both English Language Arts and math testing. It is important to clarify that this statement does not mean race or income level is the direct reason for the scores, more that the social factors, including access to opportunity, stigmas, etc can correlate with lower scores. I found that Black and Hispanic students met benchmarks less frequently than their Asian and Black counterparts, and Title I schools of all primary races met benchmarks less than the average. Considering the knowledge base we have on Black and Brown (Hispanic) as well as low-income identities being the least privileged, therefore potentially facing higher barriers to their learning, these findings were not surprising.
+
+Additionally, we can see that post-pandemic, fewer students met benchmarks as compared to pre-pandemic, therefore the pandemic had a negative impact on student learning. When the pandemic struck, public schools across America scrambled were not prepared for the transition in learning modality, which may have compromised the quality of the education. However, two years post-pandemic, the percentage of students meeting benchmarks began to rise again. This is hopeful, as perhaps more time being back in the regular routine of school can make up for the drop in number of students meeting standards seen post-pandemic.
+
+## References
+City of Chicago (2023). *IAR-PARCC Performance Levels and Sub-scores Report	2015 to 2023 School Level* \[Data set\]. <https://www.cps.edu/globalassets/cps-pages/about-cps/district-data/metrics/assessment-reports/iar-parcc_2015to2023_schoollevel.xlsx> 
+
+City of Chicago (2022). *Chicago Public Schools - School Profile Information SY1718* \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy1718> 
+
+City of Chicago (2022). *Chicago Public Schools - School Profile Information SY1819* \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy1819> 
+
+City of Chicago (2022). *Chicago Public Schools - School Profile Information SY2122* \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy2122> 
+
+City of Chicago (2022). *Chicago Public Schools - School Profile Information SY2223* \[Data set\]. <https://catalog.data.gov/dataset/chicago-public-schools-school-profile-information-sy2223> 

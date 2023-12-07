@@ -13,7 +13,7 @@ cps_sorted |>
   theme_minimal() +
   labs(
     title = "Distribution of Low-Income Students",
-    x = "% Low-Income Students Out of Whole Student Body",
+    x = "% Low-Income Students",
     y = "Count"
   )
 
@@ -29,7 +29,7 @@ cps_sorted |>
     y = "Count",
     fill = "Primary Race"
   ) +
-  scale_fill_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) +
   scale_x_discrete(labels = c("Asian", "Black", "Hispanic", "White")) +
   theme_minimal()
 
@@ -128,7 +128,7 @@ avg_ela <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_exc
        color = "Primary Race\n(Title 1 = dashed)") +
   theme_minimal() +
   scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", plot.title = element_text(size = 12))
 
 # layer average and low-income ela data
 avg_ela + 
@@ -145,7 +145,7 @@ avg_math <- ggplot(pandemic_scores_race, aes(x = as.factor(year), y = avg_met_ex
        color = "Primary Race\n(Title 1 = dashed)") +
   theme_minimal() +
   scale_color_brewer(palette = "Set1", labels = c("Asian", "Black", "Hispanic", "White")) + 
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", plot.title = element_text(size = 12))
 
 # layer average and low-income math data
 avg_math + 
